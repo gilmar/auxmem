@@ -1,5 +1,5 @@
 {
-  "template_version": "1.1.0",
+  "template_version": "1.2.0",
   "files": {
     ".scripts/gen_mocs.py": {
       "policy": "overwrite",
@@ -31,7 +31,39 @@
     },
     ".scripts/vault.config.json": {
       "policy": "merge",
-      "sha256": "5b6cb0bccce5a6926dc1c888691e654138333dfe616e5c3bff9d7d61d70bb4cd"
+      "sha256": "a11484ed56f3ee2e1c782b051d7ff758b7169fdf09ef0af547f139c23e89a0f9"
+    },
+    ".skills/adr/SKILL.md": {
+      "policy": "merge3",
+      "sha256": "8a2bcfa8b0e6f24da8769ff273d3a5900f31377281e8755db968f55bf3a5555b"
+    },
+    ".skills/distill-seeds/SKILL.md": {
+      "policy": "merge3",
+      "sha256": "1408572b810c24ca6dc2297599e7117d654d86a3e761b5e652c2f9003ed5e63c"
+    },
+    ".skills/fix-validation/SKILL.md": {
+      "policy": "merge3",
+      "sha256": "968e56d8b50a8c6f1fd62188e3c405ab5e69ba288410406b05cce887311dc285"
+    },
+    ".skills/new-note/SKILL.md": {
+      "policy": "merge3",
+      "sha256": "8946e5775fc4d9bd010ae89c3979a1ee8b6692fea8e46d6d1d6dff11c9b1255e"
+    },
+    ".skills/session-close/SKILL.md": {
+      "policy": "merge3",
+      "sha256": "b4a0d372c90810049744be0132c129f02f27b9b901dca4f7183e47995da918f8"
+    },
+    ".skills/synthesize/SKILL.md": {
+      "policy": "merge3",
+      "sha256": "63e7a7de2f692dc1f1f3a1c22a69e8fef59d4cd24025a1be15fbb8c89edfbb6f"
+    },
+    ".skills/todo/SKILL.md": {
+      "policy": "merge3",
+      "sha256": "a90604966821f3d705e3136b5b1fa120fa8a6316ee1268c5f714682d967bc3e5"
+    },
+    ".skills/weekly-review/SKILL.md": {
+      "policy": "merge3",
+      "sha256": "bbfd6e20958aea32e02c75fafd4c0d4c164dca877bd2db0ee0686b9526a6b5fb"
     },
     "90-templates/1on1.md": {
       "policy": "merge3",
@@ -75,7 +107,7 @@
     },
     "AGENTS.md": {
       "policy": "merge3",
-      "sha256": "bc689a21db4fdee058a73b795ca7f36d7441994a6c5bebfbb9fb8754ee51e177"
+      "sha256": "28ebe25610f99eb898a8efcd3f281cf2de81f693bafc072edbcf6a22bdef154f"
     },
     "CLAUDE.md": {
       "policy": "merge3",
@@ -87,11 +119,11 @@
     },
     "README.md": {
       "policy": "merge3",
-      "sha256": "dd450f32d21b9f9dbf9d1916186a2cd8ed52afcb0259f64522485b560756e281"
+      "sha256": "010fa80af3e16a0e9d07bcc7373316ce84d40aade8e0f37031cab23a7a94cb17"
     },
     "bootstrap.sh": {
       "policy": "overwrite",
-      "sha256": "9b1f4148d26c759c09892e97c2c94bf5e59c60b4ab9e3fadf1683c4a8bd29111"
+      "sha256": "f1c69217302a8c555870e8f39c0c92221d6f5a3fdbea05649d90d0ebc10648f5"
     },
     "docs/ARCHITECTURE.md": {
       "policy": "merge3",
@@ -107,7 +139,7 @@
     },
     "docs/SETUP.md": {
       "policy": "merge3",
-      "sha256": "e8968788d083b2463d5f4b275407be7974e521d8b8403c59cfcfa089872daf2c"
+      "sha256": "65ac9e0cccdadf49e4b841693b853a5658c9150fb71402224b88229e2bebafa3"
     },
     "docs/SYNTHESIS.md": {
       "policy": "merge3",

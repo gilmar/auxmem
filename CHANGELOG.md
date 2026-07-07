@@ -3,6 +3,14 @@
 Template version and CLI version are tracked independently. `auxmem upgrade`
 migrates existing vaults to newer template versions.
 
+## 1.2.0 - agent skills
+
+Template 1.2.0.
+
+- Provider-agnostic Agent Skills in `.skills/` (session close, validation fix, synthesis, new note, ADR, todo, weekly review, seed distillation).
+- `bootstrap.sh` links skills into `.claude/skills`, `.codex/skills`, `.gemini/skills`, and `.cursor/skills/`.
+- `skip_dirs` extended so skill directories are excluded from vault validation and MOC generation.
+
 ## 1.0.0 - initial public release
 
 Template 1.0.0. CLI 1.0.0.

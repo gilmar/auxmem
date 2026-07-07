@@ -83,6 +83,10 @@ Rules for you as an agent:
 
 Do not weaken the gate; fix the note. Run `python3 .scripts/validate_vault.py --json --all` and work the errors in order of their `fixable` tag: run `--fix --all` for the `auto` ones, draft `llm` ones from the note's own content and get the human's acceptance, and ask the human for `human` ones (never guess a domain, type, or unresolved source). Full protocol in docs/FIXING.md.
 
+## Skills
+
+Reusable workflows live in `.skills/` (Agent Skills standard). `bootstrap.sh` links them into `.claude/skills`, `.codex/skills`, `.gemini/skills`, and `.cursor/skills` for provider discovery. Invoke explicitly (`/skill-name`) or let the agent match by description. Skills encode this guide's workflows (session close, validation fix, synthesis, notes, ADRs, todos, weekly review, seed distillation); this file stays canonical for rules.
+
 ## Rules of thumb
 - Never invent metric, model, or system names. Check the relevant domain notes for exact names.
 - When sources conflict, the newest wins. Mark uncertainty with "as of <date>".

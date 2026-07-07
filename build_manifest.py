@@ -28,6 +28,8 @@ def policy_for(rel: str):
         return "merge"
     if rel.startswith(".scripts/") or rel == "bootstrap.sh":
         return "overwrite"
+    if rel.startswith(".skills/"):
+        return "merge3"
     if rel in ("AGENTS.md", "CLAUDE.md", "GEMINI.md", "README.md"):
         return "merge3"
     if rel.startswith("docs/") and rel.endswith(".md"):

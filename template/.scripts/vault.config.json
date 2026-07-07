@@ -59,6 +59,11 @@
     ".git",
     ".scripts",
     ".auxmem",
+    ".skills",
+    ".claude",
+    ".codex",
+    ".gemini",
+    ".cursor",
     "docs",
     "90-templates",
     "99-archive"
