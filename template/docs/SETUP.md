@@ -20,7 +20,7 @@ Edit `.scripts/vault.config.json` if this vault needs different domains. This fi
 ```bash
 ./bootstrap.sh
 ```
-This checks dependencies, creates domain and structural folders from the config, initializes git, installs the pre-commit hook, generates MOCs, and runs the validator. It is idempotent; re-run it any time.
+This checks dependencies, creates domain and structural folders from the config, links provider skill directories to `.skills/`, initializes git, installs the pre-commit hook, generates MOCs, and runs the validator. It is idempotent; re-run it any time.
 
 ## 4. Git remote
 Use a private repository. This remote will hold your entire work context, so its access controls are part of your governance surface.
@@ -32,9 +32,12 @@ git push -u origin main
 ```
 
 ## 5. Agent configuration
-- Claude Code: run `claude` from the vault root. It reads CLAUDE.md automatically, which imports AGENTS.md.
-- Codex CLI: reads AGENTS.md natively from the working directory.
-- Gemini CLI: set `contextFileName: "AGENTS.md"` in settings.json, or rely on the GEMINI.md stub.
+- Claude Code: run `claude` from the vault root. It reads CLAUDE.md automatically, which imports AGENTS.md. Skills in `.skills/` are linked to `.claude/skills/`.
+- Codex CLI: reads AGENTS.md natively from the working directory. Skills are linked to `.codex/skills/`.
+- Gemini CLI: set `contextFileName: "AGENTS.md"` in settings.json, or rely on the GEMINI.md stub. Skills are linked to `.gemini/skills/`.
+- Cursor: skills are linked to `.cursor/skills/` (also reads `.claude/skills/` for compatibility).
+
+Invoke skills explicitly (`/skill-name`) or let the agent match by description. Available workflows: session close, validation fix, synthesis, new note, ADR, todo management, weekly review, seed distillation.
 
 Prefer running one agent as the writer and others as readers, to reduce write-conflict and convention-drift risk across models.
 

@@ -10,6 +10,7 @@ This vault was created by auxmem-starter. It is auxiliary memory, not a whole br
 - Transparent git sync with automatic conflict quarantine.
 - todo.txt task management agents can read and write.
 - Generated Maps of Content (no Dataview, no plugins).
+- Provider-agnostic Agent Skills in `.skills/` for common workflows (linked to `.claude/skills`, `.codex/skills`, `.gemini/skills`, `.cursor/skills` by bootstrap).
 
 ## Working on a new machine
 Clone the repo, then install the local hook and check dependencies:
@@ -17,11 +18,12 @@ Clone the repo, then install the local hook and check dependencies:
 git clone <this-vault-repo-url> ~/__VAULT_NAME__ && cd ~/__VAULT_NAME__
 ./bootstrap.sh
 ```
-`bootstrap.sh` is idempotent. It creates any missing folders from the config, installs the pre-commit hook (git hooks are not cloned), generates MOCs, and validates.
+`bootstrap.sh` is idempotent. It creates any missing folders from the config, links provider skill directories, installs the pre-commit hook (git hooks are not cloned), generates MOCs, and validates.
 
 ## Layout
 ```
 AGENTS.md          canonical agent guide (CLAUDE.md and GEMINI.md point here)
+.skills/           provider-agnostic Agent Skills (workflows for agents)
 bootstrap.sh       per-machine installer (hooks, folders, validation)
 .scripts/          operate-time tooling and vault.config.json (single source of truth)
 docs/              SETUP, OPERATIONS, ARCHITECTURE
