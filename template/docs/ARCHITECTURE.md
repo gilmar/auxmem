@@ -46,3 +46,7 @@ The structure already reduces tokens: frontmatter summaries enable triage withou
 - Keep the sensitive-data boundary physical.
 - Keep notes short, atomic, and richly cross-linked with relative links.
 - Keep AGENTS.md under ~150 lines; instruction-following degrades past a couple hundred instructions.
+
+## Influences
+
+The reliability frame behind this design comes from Adrian Hornsby's essay ["We're Building Agents on a Foundation Most Engineers Have Never Heard Of"](https://newsletter.resiliumlabs.com/p/were-building-agents-on-a-foundation) (Resilience Bites). In his terms: the vault is the data plane, kept statically stable, the part that keeps working when everything clever is down. Every intelligent process, agents included, is control-plane automation standing on top of it, an optimization the record must never depend on to survive. His routing rule maps directly onto the vault's asymmetry: reversible, read-heavy, high-volume work goes to the agent and fails open; the irreversible act of committing a fact to the record is gated and fails closed.
