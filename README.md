@@ -4,9 +4,9 @@
 
 **Memory for AI agents, in plain markdown you own. Works with any model, survives any vendor switch, and nothing rewrites it behind your back.**
 
-The bet: for governed work memory, **the files are the product, not an index of the product**. An *auxmem vault* is a knowledge base made of nothing but markdown, YAML frontmatter, git, and todo.txt. No database, no SaaS, no plugins. You and your AI agents (Claude Code, Codex, Gemini CLI) both read and write it, and it stays yours across every model and vendor change that comes later.
+The bet: for governed work memory, **the files are the product, not an index of the product**. An *auxmem vault* is a knowledge base made of nothing but markdown, YAML frontmatter, git, and todo.txt. No database, no SaaS, no plugins. You and your AI agents (Claude Code, Codex, Gemini CLI) both read and write it, and it stays yours across every model and vendor change.
 
-*auxmem* is short for *auxiliary memory*, and it names the vault standard. **auxmem-starter** is this project: the `auxmem` tool that stands a vault up, installs its git hook and validator, and keeps it healthy across template versions. A vault is not a brain. It is the durable state your agents write to and read from. Capture and reasoning happen in whatever tools you already use. The vault holds what must persist.
+*auxmem* is short for *auxiliary memory*, and it names the vault standard. **auxmem-starter** is this project: the `auxmem` tool that stands a vault up, installs its git hook and validator, and keeps it healthy across template versions. A vault is not a brain: capture and reasoning happen in the tools you already use; the vault holds what must persist.
 
 ---
 
@@ -14,7 +14,7 @@ The bet: for governed work memory, **the files are the product, not an index of 
 
 AI agents are amnesiac. Every session starts from zero, so the context you built up yesterday, the decisions you made, the people and systems you track, all of it evaporates.
 
-Judge any fix with the turn-it-off test: delete the tooling and see what is left. Delete every piece of auxmem tooling and the memory still works. Notes open in any editor, git still diffs them, grep still finds them. The common fixes fail the test:
+Judge any fix with the turn-it-off test: delete the tooling. With auxmem, delete every script and the memory still works. Notes open in any editor, git still diffs them, grep still finds them. The common fixes fail the test:
 
 - **Provider memory** fails the day you switch vendors. Your context sits on their servers, in their format. You cannot read it, grep it, or move it.
 - **A vector database or "second brain" SaaS** fails with its server and its embedding model. Your notes become an opaque index you no longer own.
@@ -36,13 +36,13 @@ The files are the product. Three commitments follow from that bet:
 
 ## Guarantees
 
-Each of these is falsifiable with the repo cloned:
+Each is falsifiable with the repo cloned:
 
 1. **Every note opens as plain text** with no auxmem tooling installed. Any editor, any grep, any git.
 2. **Validation is deterministic.** No model, no network, no server. Same input, same verdict, and it cannot be down.
 3. **AI assists around the gate, never inside it.** With every agent offline you can still read, write, validate, and commit.
 4. **No auxmem process rewrites your notes unattended.** No daemon, no background enrichment. The one optional scheduled job is git sync, which commits, pushes, and quarantines conflicts to a branch; it never edits note content.
-5. **Derived pages cite their sources.** The validator rejects a synthesized page with no source list, and the status reporter flags a page whose source changed after it was generated.
+5. **Derived pages cite their sources.** The validator rejects a synthesized page with no source list; the status reporter flags pages whose sources changed since generation.
 6. **Sensitive personnel data does not live here, by design.** It belongs in a separate private vault on a path no agent is configured to reach. A flag is not access control; the separation is physical, and keeping it that way is your discipline, not the tool's.
 
 ## Quick start
@@ -134,11 +134,11 @@ auto-fixed 2 item(s):
 vault validation clean.
 ```
 
-Every vault carries its own operate-time tooling: a config-driven validator, a pre-commit hook, a deterministic map-of-content generator, a synthesis-status reporter, a link-graph and gap reporter, transparent git sync, and provider-agnostic Agent Skills for common workflows. One config file, `.scripts/vault.config.json`, is the single source of truth for domains and the frontmatter contract. Read [`docs/ARCHITECTURE.md`](template/docs/ARCHITECTURE.md) (shipped into every vault) for why each piece is built the way it is.
+Every vault carries its own tooling: a validator, a pre-commit hook, a map-of-content generator, synthesis and graph reporters, transparent git sync, and Agent Skills for common workflows. One config file, `.scripts/vault.config.json`, is the single source of truth for domains and the frontmatter contract. Read [`docs/ARCHITECTURE.md`](template/docs/ARCHITECTURE.md) (shipped into every vault) for why each piece is built the way it is.
 
 ## How it compares
 
-auxmem shares DNA with several recent "markdown brain" projects. They landed on the same substrate (markdown, git, an `AGENTS.md` schema, entity and concept pages) because it is the right substrate. Where they differ is the bet about *where intelligence lives* and *what you have to run*.
+Several recent "markdown brain" projects landed on the same substrate, because it is the right substrate. They differ in *where intelligence lives* and *what you have to run*.
 
 | | substrate | where intelligence lives | you have to run | best at |
 |---|---|---|---|---|
@@ -151,9 +151,9 @@ All four agree that markdown plus git is the right foundation for agent memory. 
 
 ## What auxmem is not
 
-The gate checks structure, not truth. A well-formed false statement passes it. That is exactly why authorship means a person vouches for content, why derived pages must cite sources, and why staleness is detected rather than assumed away. The division of labor is plain: agents do the high-volume work of drafting, restructuring, and searching; a person owns the one act that cannot be taken back, committing a fact to the record.
+The gate checks structure, not truth. A well-formed false statement passes it. That is exactly why authorship means a person vouches for content, why derived pages must cite sources, and why staleness is detected rather than assumed away. The division of labor: agents do the high-volume work of drafting, restructuring, and searching; a person owns the one act that cannot be taken back, committing a fact to the record.
 
-It is a personal-to-team-scale system, by design. It gives up query-time retrieval quality at massive scale and autonomous enrichment, in exchange for durability, auditability, portability, and the guarantee that nothing rewrites your record behind your back. It has no vector search, no server, no daemon. If your job is answering questions over tens of thousands of pages of external material, a system like GBrain fits better. If your job is keeping a durable, trustworthy, portable work memory, auxmem fits better.
+It is a personal-to-team-scale system, by design. It gives up retrieval quality at massive scale and autonomous enrichment, in exchange for durability, auditability, and portability. If your job is answering questions over tens of thousands of pages of external material, a system like GBrain fits better. If your job is keeping a trustworthy, portable work memory, auxmem fits better.
 
 It is also not a capture firehose. Capture in the tools you already use; let the vault hold what must persist.
 
