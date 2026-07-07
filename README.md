@@ -2,11 +2,11 @@
 
 # auxmem-starter
 
-**The tool that creates and maintains auxmem vaults: provider-independent memory for AI agents, in plain markdown you own.**
+**Memory for AI agents, in plain markdown you own. Works with any model, survives any vendor switch, and nothing rewrites it behind your back.**
 
-An *auxmem vault* is a durable, agent-readable knowledge base made of nothing but markdown, YAML frontmatter, git, and todo.txt. No database, no SaaS, no plugins, no vendor lock-in. **auxmem-starter** is this project: the scaffolding and maintenance tooling that stands a vault up, installs its git hook and validator, and keeps it healthy across template versions. You create a vault once, your AI agents (Claude Code, Codex, Gemini CLI) and you both read and write it, and it stays yours across every model and vendor change that comes later. (The CLI command is `auxmem`.)
+The bet: for governed work memory, **the files are the product, not an index of the product**. An *auxmem vault* is a knowledge base made of nothing but markdown, YAML frontmatter, git, and todo.txt. No database, no SaaS, no plugins. You and your AI agents (Claude Code, Codex, Gemini CLI) both read and write it, and it stays yours across every model and vendor change that comes later.
 
-*auxmem* is short for *auxiliary memory*, and it names the vault standard, not this tool. A vault is not a brain. It is the durable state your agents write to and read from. Capture and reasoning happen in whatever tools you already use. The vault holds what must persist.
+*auxmem* is short for *auxiliary memory*, and it names the vault standard. **auxmem-starter** is this project: the `auxmem` tool that stands a vault up, installs its git hook and validator, and keeps it healthy across template versions. A vault is not a brain. It is the durable state your agents write to and read from. Capture and reasoning happen in whatever tools you already use. The vault holds what must persist.
 
 ---
 
@@ -22,9 +22,7 @@ For personal research, some drift is fine. For work memory, decisions, governanc
 
 ## The idea
 
-auxmem makes a specific bet: **for governed work memory, the files are the product, not an index of the product.**
-
-Three commitments follow from that:
+The files are the product. Three commitments follow from that bet:
 
 1. **Open standards only.** Everything is CommonMark, YAML frontmatter, git, and todo.txt. Any human can edit a vault in any editor. Any agent can read it with no adapter. It will still open in ten years with no server running.
 2. **Governed, not free-form.** A validator and a git hook enforce a frontmatter and structure contract. Metadata stays clean and greppable because it has to. The gate is what lets you and your agents write loosely and still end up with a trustworthy record.
