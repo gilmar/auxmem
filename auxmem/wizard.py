@@ -1,23 +1,52 @@
 """Interactive terminal wizard for `auxmem new`.
 
-Stdlib only. Sequential validated prompts with a confirmation screen. Falls
-back cleanly if stdin is not a tty (raises so the CLI can tell the user to use
-flags instead).
+Stdlib only. Guided steps with plain-language context, a domain preset,
+a creation preview, and live bootstrap progress. Falls back cleanly if stdin
+is not a tty (raises so the CLI can tell the user to use flags instead).
 """
 
+import json
 import sys
 from pathlib import Path
 
 from . import scaffold
 
-CLEAR = "\033[2J\033[H"
 BOLD = "\033[1m"
 DIM = "\033[2m"
 RESET = "\033[0m"
 
+DEFAULT_DOMAINS = {
+    "10-projects": "projects",
+    "20-governance": "governance",
+    "30-ops": "ops",
+}
+
+STRUCTURAL_NOTES = {
+    "00-inbox": "unsorted captures",
+    "05-sources": "raw intake, synthesis queue",
+    "60-decisions": "decision log (ADRs)",
+    "70-meetings": "meeting notes",
+    "71-log": "session logs",
+    "72-tasks": "todo.txt task list",
+    "80-moc": "generated maps of content",
+    "85-synthesis": "derived pages with provenance",
+    "90-templates": "note templates",
+    "95-assets": "images and binaries",
+    "99-archive": "stale content, do not search",
+}
+
 
 def _banner():
-    print(f"{BOLD}auxmem{RESET} {DIM}. create a new auxiliary-memory vault{RESET}\n")
+    print(f"{BOLD}auxmem{RESET} {DIM}create a governed memory vault for your AI agents{RESET}\n")
+    print(
+        "You are about to create a folder of plain markdown notes with a validator, "
+        "a git hook, and agent skills. Your agents read and write it; nothing runs "
+        "in the background.\n"
+    )
+
+
+def _step(n, total, title):
+    print(f"{BOLD}Step {n}/{total}: {title}{RESET}")
 
 
 def _ask(prompt, default=None, validate=None):
@@ -56,60 +85,115 @@ def _validate_name(v):
     return None
 
 
-def run():
-    if not sys.stdin.isatty():
-        raise scaffold.ScaffoldError(
-            "no interactive terminal; use flags: auxmem new --name NAME --path PATH --domain NN-folder=slug ..."
-        )
-    print(CLEAR, end="")
-    _banner()
+def _template_structural_folders():
+    cfg_path = scaffold.TEMPLATE_DIR / ".scripts" / "vault.config.json"
+    cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
+    return cfg.get("structural_folders", [])
 
-    name = _ask("Vault name", default="my-vault", validate=_validate_name)
-    default_path = str(Path.home() / name)
-    path = _ask("Path to create it at", default=default_path)
 
-    print(f"\n{DIM}Domains are your subject-matter folders. Format: NN-folder=slug.")
-    print(f"Enter one per line. Blank line when done. Example: 10-projects=projects{RESET}")
+def _collect_domains():
+    print(
+        f"{DIM}Domains are your subject-matter folders. Each note gets a domain slug "
+        f"in its frontmatter so agents know where it belongs.{RESET}\n"
+    )
+    if _yesno("Use the starter set (projects, governance, ops)?", default=True):
+        return dict(DEFAULT_DOMAINS)
+
+    print(
+        f"\n{DIM}Enter a short name per area (e.g. projects, governance). "
+        "Folders are numbered automatically (10-projects, 20-governance, ...). "
+        "For full control, type NN-folder=slug instead.{RESET}"
+    )
     domains = {}
-    n = len(domains)
-    suggested = ["10-", "20-", "30-", "40-", "50-"]
     while True:
-        idx = len(domains)
-        hint = suggested[idx] if idx < len(suggested) else f"{(idx + 1) * 10}-"
-        raw = input(f"  domain {idx + 1} ({DIM}e.g. {hint}name=slug{RESET}, blank to finish): ").strip()
+        n = len(domains)
+        raw = input(f"  area {n + 1} (blank to finish): ").strip()
         if not raw:
             if domains:
                 break
             print("  at least one domain is required.")
             continue
-        try:
-            domains.update(scaffold.parse_domains([raw]))
-        except scaffold.ScaffoldError as e:
-            print(f"  {e}")
+        if "=" in raw:
+            try:
+                domains.update(scaffold.parse_domains([raw]))
+            except scaffold.ScaffoldError as e:
+                print(f"  {e}")
+            continue
+        if not scaffold.SLUG_RE.match(raw):
+            print("  use lowercase letters, digits, and hyphens.")
+            continue
+        folder = f"{(n + 1) * 10}-{raw}"
+        if folder in domains:
+            print(f"  folder {folder} already added.")
+            continue
+        domains[folder] = raw
+    return domains
 
-    seed = _yesno("\nSeed or import into this vault after creating it?", default=False)
 
-    # confirmation screen
-    print(f"\n{BOLD}About to create:{RESET}")
-    print(f"  name    {name}")
-    print(f"  path    {path}")
-    print(f"  domains")
+def _show_preview(name, path, domains):
+    print(f"\n{BOLD}This vault will contain:{RESET}\n")
+    print(f"  {DIM}name{RESET}     {name}")
+    print(f"  {DIM}path{RESET}     {path}")
+    print(f"\n  {DIM}your domains{RESET}")
     for folder, slug in domains.items():
-        print(f"          {folder}  ->  {slug}")
-    print(f"  then    {'show import instructions' if seed else 'ready to use'}")
-    if not _yesno("\nProceed?", default=True):
+        print(f"    {folder}/  ({slug})")
+    print(f"\n  {DIM}shared structure{RESET} (same in every vault)")
+    for folder in _template_structural_folders():
+        note = STRUCTURAL_NOTES.get(folder, "")
+        suffix = f"  {DIM}{note}{RESET}" if note else ""
+        print(f"    {folder}/{suffix}")
+    print(f"\n  {DIM}tooling installed{RESET}")
+    print("    git repo, validation hook, generated navigation")
+    print("    agent skills linked for Claude Code, Codex, Gemini CLI, and Cursor")
+    print("    AGENTS.md as the canonical guide for every agent\n")
+
+
+def run():
+    if not sys.stdin.isatty():
+        raise scaffold.ScaffoldError(
+            "no interactive terminal; use flags: auxmem new --name NAME --path PATH --domain NN-folder=slug ..."
+        )
+
+    _banner()
+    total = 4
+
+    _step(1, total, "Name your vault")
+    print(
+        f"{DIM}Used as the vault label, git repo name, and in config. "
+        "Lowercase and hyphens only.{RESET}\n"
+    )
+    name = _ask("Vault name", default="my-vault", validate=_validate_name)
+
+    _step(2, total, "Choose a location")
+    print(f"{DIM}Must be empty or not exist yet.{RESET}\n")
+    default_path = str(Path.home() / name)
+    path = _ask("Path", default=default_path)
+
+    _step(3, total, "Pick your domains")
+    print()
+    domains = _collect_domains()
+
+    _step(4, total, "Review and create")
+    _show_preview(name, path, domains)
+    if not _yesno("Create this vault?", default=True):
         print("cancelled.")
         return None
 
-    result = scaffold.scaffold(name, path, domains, run_bootstrap=True)
-    print(f"\n{BOLD}Created {result['dest']}{RESET}")
+    print(f"\n{BOLD}Creating vault...{RESET}\n")
+    result = scaffold.scaffold(
+        name, path, domains, run_bootstrap=True, stream_bootstrap=True
+    )
+
+    dest = result["dest"]
+    print(f"\n{BOLD}Vault ready at {dest}{RESET}\n")
     print("Next steps:")
-    print(f"  cd {result['dest']}")
-    print("  git remote add origin <your-private-repo-url>")
-    print("  git add -A && git commit -m 'initial vault' && git push -u origin main")
-    if seed:
-        print("\nTo seed or import, from the auxmem-starter directory:")
-        print(f"  auxmem seed <export.json> --staging ./seed-staging")
-        print(f"  auxmem import-obsidian <old-vault> --dest {result['dest']} --map map.json")
-        print("  see docs/IMPORTING.md")
+    print(f"  1. cd {dest}")
+    print("  2. Point your agent at this folder (claude, codex, or gemini)")
+    print("     It reads AGENTS.md automatically.")
+    print("  3. Optional: set a private git remote and push")
+    print("     git remote add origin <url>")
+    print("     git add -A && git commit -m 'initial vault' && git push -u origin main")
+    print("  4. Optional: seed from AI exports or import Obsidian (see docs/IMPORTING.md)")
+    print(f"     auxmem seed <export.json> --staging ./seed-staging")
+    print(f"     auxmem import-obsidian <old-vault> --dest {dest} --map map.json")
     return result
