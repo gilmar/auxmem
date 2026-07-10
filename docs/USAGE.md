@@ -10,7 +10,7 @@ Creates a vault. Interactive when run bare; flag-driven when all of `--name`, `-
 ```bash
 auxmem new
 ```
-Prompts for a vault name (lowercase, hyphens), a path, and one or more domains. Domains are entered as `NN-folder=slug` (for example `10-projects=projects`), one per line, blank line to finish. A confirmation screen shows the plan before anything is written. The wizard requires a real terminal; in a pipe or CI it exits and tells you to use flags.
+A guided four-step flow: name, location, domains, review. Domains default to a starter set (projects, governance, ops); you can enter short names instead and the wizard numbers the folders for you. The review step shows your domains, the shared vault structure, and the tooling that will be installed. Bootstrap progress prints live. The wizard requires a real terminal; in a pipe or CI it exits and tells you to use flags.
 
 ### Flag-driven (scriptable, CI-friendly)
 ```bash

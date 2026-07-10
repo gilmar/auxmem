@@ -72,7 +72,7 @@ def _substitute(path, replacements):
     path.write_text(text, encoding="utf-8")
 
 
-def scaffold(name, dest, domains, run_bootstrap=True):
+def scaffold(name, dest, domains, run_bootstrap=True, stream_bootstrap=False):
     """Create a vault named `name` at `dest` with the given domain map."""
     if not TEMPLATE_DIR.is_dir():
         raise ScaffoldError(
@@ -120,13 +120,20 @@ def scaffold(name, dest, domains, run_bootstrap=True):
 
     result = {"dest": dest, "domains": domains, "bootstrapped": False}
     if run_bootstrap:
-        proc = subprocess.run(["bash", "bootstrap.sh"], cwd=dest,
-                              capture_output=True, text=True)
-        result["bootstrap_stdout"] = proc.stdout
-        result["bootstrap_stderr"] = proc.stderr
+        kwargs = {"cwd": dest, "text": True}
+        if stream_bootstrap:
+            proc = subprocess.run(["bash", "bootstrap.sh"], **kwargs)
+            result["bootstrap_stdout"] = ""
+            result["bootstrap_stderr"] = ""
+        else:
+            proc = subprocess.run(["bash", "bootstrap.sh"], capture_output=True, **kwargs)
+            result["bootstrap_stdout"] = proc.stdout
+            result["bootstrap_stderr"] = proc.stderr
         result["bootstrapped"] = proc.returncode == 0
         if proc.returncode != 0:
+            detail = result["bootstrap_stdout"] + result["bootstrap_stderr"]
             raise ScaffoldError(
-                f"bootstrap failed:\n{proc.stdout}\n{proc.stderr}"
+                f"bootstrap failed:\n{detail}" if detail.strip()
+                else "bootstrap failed (see output above)"
             )
     return result

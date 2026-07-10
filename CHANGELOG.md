@@ -3,6 +3,12 @@
 Template version and CLI version are tracked independently. `auxmem upgrade`
 migrates existing vaults to newer template versions.
 
+## 1.1.0 - guided vault creation
+
+CLI 1.1.0.
+
+- Rework `auxmem new` interactive wizard: plain-language steps, domain preset, creation preview, live bootstrap progress, agent-oriented next steps.
+
 ## 1.0.1 - packaging fix
 
 CLI 1.0.1.
