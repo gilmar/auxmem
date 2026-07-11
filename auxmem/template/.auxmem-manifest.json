@@ -1,5 +1,5 @@
 {
-  "template_version": "1.3.0",
+  "template_version": "1.3.1",
   "files": {
     ".scripts/gen_mocs.py": {
       "policy": "overwrite",
@@ -11,7 +11,7 @@
     },
     ".scripts/pre-commit": {
       "policy": "overwrite",
-      "sha256": "54ee1672b2fae2a475372eeffcb95c63e6deba5d82fae04f20ad08c56d2729aa"
+      "sha256": "23747af0f146090e0377ffe0dc6f9179adbfe5ec2927f09dfcc52df916b65ff1"
     },
     ".scripts/synthesis_status.py": {
       "policy": "overwrite",
@@ -23,7 +23,7 @@
     },
     ".scripts/vault-sync.sh": {
       "policy": "overwrite",
-      "sha256": "23c12fe182e85060067b761a24dfeae4129520ac9924dee0b83642162a370ad2"
+      "sha256": "e852e60f52ce900e48475cab4f56ce2c04b41b423e9639f040631a230de7ad94"
     },
     ".scripts/vault-sync.systemd": {
       "policy": "overwrite",
@@ -127,7 +127,7 @@
     },
     "bootstrap.sh": {
       "policy": "overwrite",
-      "sha256": "b93178ed1c423f6b12ee39ab4e287ba5e9124b9d4d1f8f174355365c9c25e18f"
+      "sha256": "df26ac7f408d0f7a5d63cfcdabd8426dfa38ad996f9ee8721191363d675c58b8"
     },
     "docs/ARCHITECTURE.md": {
       "policy": "merge3",
@@ -139,11 +139,11 @@
     },
     "docs/OPERATIONS.md": {
       "policy": "merge3",
-      "sha256": "f331a486a2c43ddee5fd47ed65c7db14a0578662c8b295c92aef544ef231757c"
+      "sha256": "0840b352cd0755e81a3c53d813ae649f7e6e604eca931d15debc7d21ec801de2"
     },
     "docs/SETUP.md": {
       "policy": "merge3",
-      "sha256": "65ac9e0cccdadf49e4b841693b853a5658c9150fb71402224b88229e2bebafa3"
+      "sha256": "ff326137d427bc7b718a414577df5e52a72958ca6ed6a78d56da27772e2f00d2"
     },
     "docs/SYNTHESIS.md": {
       "policy": "merge3",

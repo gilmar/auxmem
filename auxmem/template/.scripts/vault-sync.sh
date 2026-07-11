@@ -1,23 +1,40 @@
 #!/bin/bash
 # vault-sync.sh: transparent git synchronisation for the vault.
-# Safe to run concurrently (flock), from a systemd timer, or manually.
+# Safe to run concurrently (mkdir lock), from a systemd timer, or manually.
 # Design: sync is unconditional. Validation is enforced by agents' own
 # commits (pre-commit hook) and by CI, never by this script.
 #
 # Usage: vault-sync.sh [vault_path]   (default: $HOME/vault)
+# Portable: bash 3.2+ (macOS default /bin/bash). flock and GNU date are not required.
 
 set -uo pipefail
 
 VAULT="${1:-$HOME/vault}"
 BRANCH="main"
 REMOTE="origin"
-HOST="$(hostname -s)"
-LOCK="/tmp/vault-sync.lock"
+LOCK_DIR="/tmp/vault-sync.lock.d"
 
-log() { echo "[vault-sync $(date -Iseconds)] $*"; }
+iso_now() {
+    date -u +%Y-%m-%dT%H:%M:%SZ
+}
 
-exec 9>"$LOCK"
-flock -n 9 || { log "another sync is running, skipping"; exit 0; }
+short_host() {
+    if hostname -s >/dev/null 2>&1; then
+        hostname -s
+    else
+        hostname 2>/dev/null | cut -d. -f1
+    fi
+}
+
+HOST="$(short_host)"
+
+log() { echo "[vault-sync $(iso_now)] $*"; }
+
+if ! mkdir "$LOCK_DIR" 2>/dev/null; then
+    log "another sync is running, skipping"
+    exit 0
+fi
+trap 'rmdir "$LOCK_DIR" 2>/dev/null || true' EXIT
 
 cd "$VAULT" || { log "vault not found: $VAULT"; exit 1; }
 
@@ -27,7 +44,7 @@ cd "$VAULT" || { log "vault not found: $VAULT"; exit 1; }
 if [ -n "$(git status --porcelain)" ]; then
     git add -A
     VAULT_AUTOSYNC=1 git commit --no-verify -q \
-        -m "sync($HOST): $(date -Iseconds)" || true
+        -m "sync($HOST): $(iso_now)" || true
 fi
 
 # 2. Pull with rebase + autostash.

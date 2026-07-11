@@ -17,6 +17,15 @@ CLI 1.2.0.
 - Simplify `auxmem new` wizard to three steps (name, location, review); no preset domains.
 - Add `setup-domains` agent skill for tailoring subject folders after creation.
 
+## 1.3.1 - portable shell scripts
+
+Template 1.3.1.
+
+- Fix pre-commit hook on macOS bash 3.2: replace `mapfile` with a NUL-delimited read loop.
+- Make `vault-sync.sh` portable: drop Linux-only `flock`, replace GNU `date -Iseconds`.
+- Document bash 3.2 / POSIX baseline; re-run `./bootstrap.sh` after upgrade to refresh the hook.
+- Add `scripts/lint-shell.sh` and CI shellcheck workflow.
+
 ## 1.3.0 - setup-domains skill
 
 Template 1.3.0.
