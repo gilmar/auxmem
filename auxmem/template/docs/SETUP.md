@@ -5,6 +5,7 @@ One-time setup for a vault created from this template. Assumes Linux or WSL2. Co
 ## 1. Prerequisites
 - Python 3.10+ with pip.
 - git.
+- A POSIX shell or bash 3.2+. Vault scripts use `#!/bin/bash` and are written for macOS default `/bin/bash` (3.2) and Linux bash; they do not require bash 4+, GNU coreutils, or `flock`.
 - One or more CLI agents: Claude Code, Codex CLI, or Gemini CLI.
 - Importing existing notes or seeding from AI exports is done from auxmem-starter before or after creation, not from the vault. See the starter docs/IMPORTING.md.
 
@@ -20,7 +21,7 @@ Edit `.scripts/vault.config.json` if this vault needs different domains. This fi
 ```bash
 ./bootstrap.sh
 ```
-This checks dependencies, creates domain and structural folders from the config, links provider skill directories to `.skills/`, initializes git, installs the pre-commit hook, generates MOCs, and runs the validator. It is idempotent; re-run it any time.
+This checks dependencies, creates domain and structural folders from the config, links provider skill directories to `.skills/`, initializes git, installs the pre-commit hook, generates MOCs, and runs the validator. It is idempotent; re-run it any time. After `auxmem upgrade`, re-run `./bootstrap.sh` so the installed pre-commit hook picks up template fixes.
 
 ## 4. Git remote
 Use a private repository. This remote will hold your entire work context, so its access controls are part of your governance surface.

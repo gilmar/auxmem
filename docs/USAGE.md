@@ -86,6 +86,8 @@ Each vault records the template version it was built from and keeps a pristine s
 
 Everything replaced or merged is backed up under `.auxmem/backups/<timestamp>/` (git-ignored, local only) before any change. Upgrade then regenerates MOCs, runs the validator, and writes an `upgrade-report-*.md` into `00-inbox/` listing every change and anything needing your review. If validation fails after upgrade, the command warns and exits non-zero so you notice.
 
+After upgrade, run `./bootstrap.sh` from the vault root so `.git/hooks/pre-commit` is refreshed from `.scripts/pre-commit` (upgrade updates the source file but does not reinstall the hook).
+
 ### Migrating task files to 72-tasks/ (template 1.1.0+)
 
 Task files moved from the vault root into `72-tasks/`. Upgrade updates tooling and config but does not move your content. If your vault still has root-level task files:

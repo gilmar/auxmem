@@ -14,7 +14,6 @@
 
 set -euo pipefail
 cd "$(dirname "$0")"
-ROOT="$(pwd)"
 CFG=".scripts/vault.config.json"
 
 echo "== 1. dependencies =="
@@ -76,7 +75,7 @@ link_skills .cursor/skills
 echo "== 5. pre-commit hook =="
 cp .scripts/pre-commit .git/hooks/pre-commit
 chmod +x .git/hooks/pre-commit
-echo "  installed"
+echo "  installed (re-run ./bootstrap.sh after auxmem upgrade to refresh the hook)"
 
 echo "== 6. generate MOCs =="
 if python3 - "$CFG" << 'PY'

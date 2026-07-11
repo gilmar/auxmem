@@ -46,7 +46,7 @@ This keeps an honest, time-ordered decision history and prevents an accepted dec
 Open tasks in `72-tasks/todo.txt`, archive in `72-tasks/done.txt`, todo.txt format. See AGENTS.md for the grammar and write rules. The validator enforces the grammar. Complete tasks in place, then move `x` lines to done.txt at session close. Never delete an open task; to drop one, complete it with `+cancelled`.
 
 ## Sync behavior
-The sync script (`.scripts/vault-sync.sh`) is transparent and unconditional. It commits local changes (bypassing validation, since sync must never block), pulls with rebase and autostash, and pushes. Validation is enforced by agent and human commits (via the hook) and by CI, not by sync.
+The sync script (`.scripts/vault-sync.sh`) is transparent and unconditional. It commits local changes (bypassing validation, since sync must never block), pulls with rebase and autostash, and pushes. Validation is enforced by agent and human commits (via the hook) and by CI, not by sync. The script uses bash 3.2–compatible syntax and a portable directory lock (no Linux-only `flock`).
 
 Append-only files (`71-log/`, `00-inbox/`, `72-tasks/done.txt`) use `merge=union` so two devices appending never conflict.
 
