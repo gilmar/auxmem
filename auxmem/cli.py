@@ -13,6 +13,29 @@ from pathlib import Path
 
 from . import scaffold, wizard, importers, upgrade as upgrade_mod
 
+EPILOG = """
+where to run commands
+  All auxmem subcommands run from any directory. You do not need to cd into a
+  vault first. When a command operates on an existing vault, pass its path as
+  an argument (or as --dest).
+
+  Setup (no vault yet):
+    new                 create a vault at the path you choose
+
+  Existing vault (pass the vault path):
+    doctor PATH         validate and refresh navigation maps
+    upgrade PATH        migrate vault tooling to the current template
+    import-obsidian … --dest PATH   import notes into that vault
+
+  Outside any vault (import prep):
+    seed EXPORT         write a staging corpus (default ./seed-staging); stage 2
+                        is an agent step run from inside the target vault
+
+  Inside the vault (not auxmem subcommands):
+    ./bootstrap.sh, agent skills, python3 .scripts/validate_vault.py — see the
+    vault README and AGENTS.md for day-to-day work.
+"""
+
 
 def cmd_upgrade(args):
     try:
@@ -105,10 +128,27 @@ def cmd_doctor(args):
 
 
 def build_parser():
-    p = argparse.ArgumentParser(prog="auxmem", description="Create and manage auxmem vaults.")
-    sub = p.add_subparsers(dest="cmd", required=True)
+    p = argparse.ArgumentParser(
+        prog="auxmem",
+        description=(
+            "Create and manage auxmem vaults. Run from any directory; pass a vault "
+            "path when a command needs an existing vault."
+        ),
+        epilog=EPILOG,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    sub = p.add_subparsers(
+        dest="cmd",
+        title="commands",
+        metavar="COMMAND",
+        help="run auxmem COMMAND --help for details",
+    )
 
-    n = sub.add_parser("new", help="create a new vault (interactive if flags omitted)")
+    n = sub.add_parser(
+        "new",
+        help="create a new vault (no existing vault needed)",
+        description="Create a new vault. Run from anywhere; writes to --path.",
+    )
     n.add_argument("--name")
     n.add_argument("--path")
     n.add_argument("--domain", action="append", metavar="NN-folder=slug",
@@ -116,17 +156,34 @@ def build_parser():
     n.add_argument("--no-bootstrap", action="store_true", help="skip folder/hook/validate setup")
     n.set_defaults(func=cmd_new)
 
-    s = sub.add_parser("seed", help="normalize a provider export into a staging corpus")
+    s = sub.add_parser(
+        "seed",
+        help="normalize an export to staging (outside any vault)",
+        description=(
+            "Stage 1 of seeding: normalize a provider export into a staging folder "
+            "(default ./seed-staging). Does not modify a vault. Stage 2 (distill into "
+            "notes) is an agent step run from inside the target vault."
+        ),
+    )
     s.add_argument("export_file")
-    s.add_argument("--staging", default="./seed-staging")
+    s.add_argument("--staging", default="./seed-staging",
+                   help="output folder, usually outside the vault (default: ./seed-staging)")
     s.add_argument("--provider", choices=["claude", "chatgpt", "gemini"])
     s.add_argument("--since")
     s.add_argument("--min-messages", type=int)
     s.set_defaults(func=cmd_seed)
 
-    o = sub.add_parser("import-obsidian", help="import an Obsidian vault into an auxmem vault")
+    o = sub.add_parser(
+        "import-obsidian",
+        help="import Obsidian notes into an existing vault",
+        description=(
+            "Import an Obsidian vault into an existing auxmem vault. Run from anywhere; "
+            "pass the auxmem vault path as --dest."
+        ),
+    )
     o.add_argument("src", help="path to the existing Obsidian vault")
-    o.add_argument("--dest", required=True, help="target auxmem vault")
+    o.add_argument("--dest", required=True, metavar="VAULT",
+                   help="path to the target auxmem vault (must already exist)")
     o.add_argument("--map", help="folder map JSON")
     o.add_argument("--export-tmp", default="/tmp/auxmem-obsidian-export")
     o.add_argument("--no-pipeline", action="store_true",
@@ -134,12 +191,26 @@ def build_parser():
     o.add_argument("--dry-run", action="store_true")
     o.set_defaults(func=cmd_import_obsidian)
 
-    d = sub.add_parser("doctor", help="validate a vault and refresh its MOCs")
-    d.add_argument("dest")
+    d = sub.add_parser(
+        "doctor",
+        help="validate an existing vault and refresh its MOCs",
+        description=(
+            "Validate a vault and regenerate its navigation maps. Run from anywhere; "
+            "pass the vault path as the argument."
+        ),
+    )
+    d.add_argument("dest", metavar="VAULT", help="path to the auxmem vault")
     d.set_defaults(func=cmd_doctor)
 
-    u = sub.add_parser("upgrade", help="migrate a vault to the current template version")
-    u.add_argument("dest", help="the auxmem vault to upgrade")
+    u = sub.add_parser(
+        "upgrade",
+        help="migrate an existing vault to the current template",
+        description=(
+            "Upgrade vault tooling to the current template version. Run from anywhere; "
+            "pass the vault path as the argument. Never touches your notes."
+        ),
+    )
+    u.add_argument("dest", metavar="VAULT", help="path to the auxmem vault to upgrade")
     u.add_argument("--force", action="store_true", help="re-apply even if already current")
     u.set_defaults(func=cmd_upgrade)
 
@@ -147,7 +218,11 @@ def build_parser():
 
 
 def main(argv=None):
-    args = build_parser().parse_args(argv)
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    if args.cmd is None:
+        parser.print_help()
+        return 0
     return args.func(args)
 
 
