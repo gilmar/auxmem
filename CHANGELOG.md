@@ -3,9 +3,9 @@
 Template version and CLI version are tracked independently. `auxmem upgrade`
 migrates existing auxmems to newer template versions.
 
-## 2.0.0 - AuxMem product rename
+## 0.1.0 - AuxMem product rename (pre-alpha)
 
-CLI 2.0.0. Template 2.0.0.
+CLI 0.1.0. Template 0.1.0.
 
 - Project renamed from auxmem-starter to **AuxMem**; PyPI package `auxmem`.
 - Managed folders are **auxmems** (not vaults); internal files renamed (`auxmem.config.json`, `validate_auxmem.py`, `auxmem-sync.sh`, …).

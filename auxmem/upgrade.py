@@ -264,7 +264,7 @@ def _write_report(dest, old_v, new_v, report, conflicts, ts):
             "",
             "- Run `./bootstrap.sh` to refresh the git pre-commit hook.",
             "- If you use the sync timer, reinstall from `.scripts/auxmem-sync.systemd` "
-            "(unit `ExecStart` path changed from `auxmem-sync.sh` to `auxmem-sync.sh`). "
+            "(unit `ExecStart` path changed from `vault-sync.sh` to `auxmem-sync.sh`). "
             "Pass your auxmem path explicitly if it is not `~/auxmem`.",
         ]
     out = dest / "00-inbox" / f"upgrade-report-{ts}.md"
@@ -273,10 +273,15 @@ def _write_report(dest, old_v, new_v, report, conflicts, ts):
 
 
 def _is_major_rebrand(old_v, new_v):
+    """1.x vault layout → auxmem rename; show bootstrap/timer notes once."""
+    if old_v in (new_v, "0.1.0"):
+        return False
+    if old_v in ("pre-versioning", "unknown"):
+        return True
     try:
-        return float(old_v.split(".")[0]) < 2 and new_v.startswith("2.")
+        return int(old_v.split(".")[0]) == 1
     except (ValueError, IndexError):
-        return new_v.startswith("2.") and old_v not in ("2.0.0", new_v)
+        return False
 
 
 def _primary_domain(dest):
