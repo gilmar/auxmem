@@ -7,12 +7,11 @@ description: Create a new auxmem note from 90-templates with correct frontmatter
 
 ## Steps
 
-1. **Pick template** — Copy from `90-templates/` matching the note type:
-   - `project-doc`, `governance-finding`, `meeting`, `1on1`, `stakeholder`, `exec-doc`, `source`, `entity`, `concept`, `adr`, `weekly-review`
+1. **Pick template** — Copy from `90-templates/` whose `type:` matches the note you need. Valid `type` and `status` values are only those listed under `vocab` in `.scripts/auxmem.config.json`.
 
-2. **Choose domain** — `domain` must be a slug from `.scripts/auxmem.config.json` `domains` values. Do not guess; ask if unclear.
+2. **Choose domain** — `domain` must be a slug from `domains` values in `.scripts/auxmem.config.json`. Do not guess; ask if unclear.
 
-3. **Fill frontmatter** — Required: `title`, `summary` (≥40 chars, concrete nouns), `type`, `status`, `domain`, `created`, `updated` (today). Use controlled `type` and `status` from config vocab.
+3. **Fill frontmatter** — Required fields and `min_summary_len` are in the config. Set `title`, `summary` (meet minimum length, concrete nouns), `type`, `status`, `domain`, `created`, `updated` (today).
 
 4. **Write body** — CommonMark + GFM only. Internal links: relative markdown `[title](../path/note.md)`. No wikilinks, no callouts, no Dataview.
 

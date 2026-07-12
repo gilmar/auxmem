@@ -10,7 +10,7 @@ Three layers, borrowed from Karpathy's LLM wiki pattern but adapted so synthesis
 - Authored notes (`10-50` domains): your own ground truth. Decisions, findings, profiles. Not synthesized, not derived.
 - Synthesized pages (`85-synthesis/`, `type: entity` or `type: concept`): derived, agent-maintained, one page per notable entity or concept. Convenience and navigation, not authority.
 
-The distinction is enforced by the validator: a synthesized page must declare `synthesis: generated`, cite a non-empty `sources:` list, and carry `review:` and `generated_at`. A page that does not cite its provenance cannot exist. Authored notes must never claim to be generated.
+The distinction is enforced by the validator (schema and vocab from `.scripts/auxmem.config.json`): a synthesized page must declare `synthesis: generated`, cite a non-empty `sources:` list, and carry `review:` and `generated_at`. A page that does not cite its provenance cannot exist. Authored notes must never claim to be generated.
 
 ## Why it is a queue, not automatic
 
@@ -22,7 +22,7 @@ The distinction is enforced by the validator: a synthesized page must declare `s
 2. For each unsynthesized source and each stale page, read the source(s) and the existing synthesized page if one exists.
 3. Create or update entity pages (one per notable person, system, org, product) and concept pages (one per topic or idea) in `85-synthesis/`. Copy the template from `90-templates/entity.md` or `concept.md`.
 4. For every synthesized page:
-   - Cite every source it draws from in `sources:` (auxmem-root-relative paths, e.g. `05-sources/cube-docs.md` or `10-data-hub/mcp-server.md`).
+   - Cite every source it draws from in `sources:` (auxmem-root-relative paths, e.g. `05-sources/cube-docs.md` or `<domain-folder>/mcp-server.md` from your config).
    - Set `generated_at` to today and `review: needed`.
    - Make every claim traceable to a cited source. Do not invent. Mark uncertainty.
    - Record contradictions between sources in the page's "Open questions and contradictions" section rather than silently resolving them.
