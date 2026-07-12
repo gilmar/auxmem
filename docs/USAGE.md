@@ -1,6 +1,6 @@
 # Usage
 
-Full reference for the `corpus` command. Run in place with `./koinome-cli <cmd>` or install to get `corpus <cmd>`.
+Full reference for the **`koinome`** command. Run in place with `./koinome-cli <cmd>` or install to get **`koinome <cmd>`**.
 
 ## Installing Koinome
 
@@ -16,7 +16,7 @@ pipx install koinome
 
 # Wheel in a virtual environment
 python3 -m venv .venv && source .venv/bin/activate
-pip install corpus   # or: pip install dist/koinome-*.whl
+pip install koinome   # or: pip install dist/koinome-*.whl
 ```
 
 `bootstrap.sh` inside a corpus checks for PyYAML but does not run `pip install` against system Python. If bootstrap reports a missing dependency, use one of the paths above, then re-run `./bootstrap.sh`. Paths containing spaces are supported (`koinome new --path "/path/with spaces/my-corpus"`).
@@ -26,6 +26,10 @@ When provider skill directories cannot be symlinked, bootstrap copies `.skills/`
 ## koinome new
 
 Creates a corpus. Interactive when run bare; flag-driven when `--name` and `--path` are given.
+
+## koinome init
+
+Alias for **`koinome new`** today. The strategy demo ([§8](STRATEGY.md)) uses `koinome init`; semantics may grow when corpus identity manifest work lands. Until then, every flag and behavior documented for `new` applies to `init`.
 
 ### Interactive wizard
 ```bash

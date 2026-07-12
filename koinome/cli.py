@@ -1,7 +1,7 @@
 """Koinome command-line interface.
 
 Subcommands:
-  koinome new         create a corpus (interactive wizard, or flag-driven)
+  koinome new|init    create a corpus (interactive wizard, or flag-driven)
   koinome seed        stage 1 of seeding: normalize a provider export to staging
   koinome doctor      validate a corpus and refresh navigation
   koinome check       read-only conformance check (CI-safe)
@@ -22,8 +22,9 @@ where to run commands
   an argument (or as --dest).
 
   Setup (no corpus yet):
-    new                 create a corpus at the path you choose (shared folders only);
-                        run the koinome-init skill inside the folder to finish setup
+    new, init           create a corpus at the path you choose (shared folders only);
+                        init is an alias for new today; run the koinome-init skill inside
+                        the folder to finish setup
 
   Existing corpus (pass the folder path):
     check PATH          read-only validation + MOC freshness (for CI)
@@ -179,6 +180,7 @@ def build_parser():
 
     n = sub.add_parser(
         "new",
+        aliases=["init"],
         help="create a new corpus (no existing corpus needed)",
         description=(
             "Create a new corpus with shared folders only. Run from anywhere; writes to "

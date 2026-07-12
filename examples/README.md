@@ -1,6 +1,6 @@
 # Reference corpora
 
-Sanitized, fictional corpora that demonstrate governed work memory patterns. All content is synthetic — no real client, employer, or personal data.
+Sanitized, fictional corpora that demonstrate governed-knowledge patterns. All content is synthetic — no real client, employer, or personal data.
 
 ## Examples
 

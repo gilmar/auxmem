@@ -51,7 +51,11 @@ Compare providers on **context recovery** and **citation quality**, not reasonin
 
 Published results template: [`examples/evaluation/RESULTS.md`](../examples/evaluation/RESULTS.md)
 
+**Benchmark integrity (strategy D11):** The evaluation harness in this repository is public. **All** results are published, including runs where Koinome scores worse than alternatives or fails a rubric item. A benchmark that flatters its author's tool deserves to be dismissed.
+
 Negative results and limitations must be reported explicitly. README guarantee claims should cite which deterministic checks or agent runs support them.
+
+A **cross-tool benchmark harness** comparing Koinome to other memory and markdown-brain tools is future work (strategy §11, months 6–9). Until it ships, this document separates deterministic checks from informal agent runs and does not claim competitive rankings.
 
 ## Git history fixture
 
