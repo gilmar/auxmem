@@ -2,15 +2,18 @@
 
 from __future__ import annotations
 
+import json
 import re
 
 import pytest
 
 from auxmem import __version__
+from auxmem.version import CONFORMANCE_VERSION, TEMPLATE_VERSION
 from tests.helpers import REPO_ROOT
 
 PYPROJECT = REPO_ROOT / "pyproject.toml"
 RELEASE_DOC = REPO_ROOT / "docs" / "RELEASE.md"
+MANIFEST = REPO_ROOT / "auxmem" / "template" / ".auxmem-manifest.json"
 MISTAKEN_PYPI_VERSION = "2.0.0"
 
 
@@ -27,6 +30,12 @@ def _version_tuple(version: str) -> tuple[int, ...]:
 
 def test_cli_and_pyproject_versions_match():
     assert __version__ == _read_pyproject_version()
+
+
+def test_template_and_conformance_versions_documented_in_manifest():
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    assert manifest["template_version"] == TEMPLATE_VERSION
+    assert manifest["conformance_version"] == CONFORMANCE_VERSION
 
 
 def test_release_policy_documented():

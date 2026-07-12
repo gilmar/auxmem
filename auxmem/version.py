@@ -1,8 +1,17 @@
-"""Template version. Bump when the template changes in a way auxmems should adopt.
+"""Version identifiers for AuxMem releases.
 
-Semantic-ish: bump minor for additive/safe changes (new tooling checks, new
-config keys, guidance edits), major for changes that may require manual review.
+Three coordinated versions are tracked:
 
-Versioning is paused at 0.0.0 until explicitly restarted.
+* **CLI** (`__version__` in ``auxmem/__init__.py``, ``pyproject.toml``): the
+  AuxMem Manager package on PyPI.
+* **Template** (``TEMPLATE_VERSION``, manifest ``template_version``): auxmem
+  folder tooling and guidance adopted via ``auxmem upgrade``.
+* **Conformance** (``CONFORMANCE_VERSION``, manifest ``conformance_version``):
+  the validator and ``check_auxmem`` contract. Bump when rules change what
+  constitutes a valid note — a compatibility-relevant change.
+
+Versioning is paused at ``0.0.0`` until the hardening cycle completes and an
+intentional prerelease is published. See ``docs/RELEASE.md``.
 """
 TEMPLATE_VERSION = "0.0.0"
+CONFORMANCE_VERSION = "0.0.0"

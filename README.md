@@ -171,6 +171,8 @@ It is also not a capture firehose. Capture in the tools you already use; let the
 ## Design and philosophy
 
 - [`docs/USAGE.md`](docs/USAGE.md) command reference, including the upgrade and fix workflows
+- [`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md) supported environments and smoke procedures
+- [`docs/RELEASE.md`](docs/RELEASE.md) version policy and release gate
 - [`docs/IMPORTING.md`](docs/IMPORTING.md) seeding from AI exports and migrating an Obsidian vault
 - [`auxmem/template/docs/ARCHITECTURE.md`](auxmem/template/docs/ARCHITECTURE.md) why each design choice is what it is
 - [`auxmem/template/docs/SYNTHESIS.md`](auxmem/template/docs/SYNTHESIS.md) the governed synthesis loop (raw vs derived)
@@ -178,7 +180,7 @@ It is also not a capture firehose. Capture in the tools you already use; let the
 
 ## Status
 
-Building in public, pre-release (CLI and template version `0.0.0`; versioning resumes when explicitly bumped). The auxmem template is versioned independently of the CLI, and `auxmem upgrade` migrates existing auxmems to newer template versions with a 3-way merge that never touches your notes. Feedback and issues welcome.
+Building in public, pre-release (CLI, template, and conformance version `0.0.0`; versioning resumes when explicitly bumped). See [`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md) for supported environments. `auxmem upgrade` migrates existing auxmems to newer template versions with a 3-way merge that never touches your notes. Feedback and issues welcome.
 
 ## License
 

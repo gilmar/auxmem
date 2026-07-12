@@ -20,7 +20,7 @@ STARTER_ROOT = Path(__file__).resolve().parent
 TEMPLATE = STARTER_ROOT / "auxmem" / "template"
 sys.path.insert(0, str(STARTER_ROOT))
 from auxmem.manifest import policy_for, sha256_file
-from auxmem.version import TEMPLATE_VERSION
+from auxmem.version import CONFORMANCE_VERSION, TEMPLATE_VERSION
 
 
 def build():
@@ -34,10 +34,17 @@ def build():
         pol = policy_for(rel)
         if pol:
             files[rel] = {"policy": pol, "sha256": sha256_file(p)}
-    manifest = {"template_version": TEMPLATE_VERSION, "files": files}
+    manifest = {
+        "template_version": TEMPLATE_VERSION,
+        "conformance_version": CONFORMANCE_VERSION,
+        "files": files,
+    }
     out = TEMPLATE / ".auxmem-manifest.json"
     out.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    print(f"wrote {out} ({len(files)} managed files, version {TEMPLATE_VERSION})")
+    print(
+        f"wrote {out} ({len(files)} managed files, "
+        f"template {TEMPLATE_VERSION}, conformance {CONFORMANCE_VERSION})"
+    )
 
 
 if __name__ == "__main__":
