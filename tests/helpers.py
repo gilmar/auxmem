@@ -103,6 +103,14 @@ def run_validator(args: list[str], *, cwd: Path) -> CommandResult:
     return run_cmd([sys.executable, ".scripts/validate_auxmem.py", *args], cwd=cwd)
 
 
+def run_staged_snapshot_check(path: Path) -> CommandResult:
+    return run_cmd([sys.executable, ".scripts/check_staged_snapshot.py"], cwd=path)
+
+
+def git_add(path: Path, *rel_paths: str) -> CommandResult:
+    return run_git(["add", *rel_paths], cwd=path)
+
+
 def write_note(auxmem: Path, rel: str, content: str) -> Path:
     path = auxmem / rel
     path.parent.mkdir(parents=True, exist_ok=True)

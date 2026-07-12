@@ -1,6 +1,6 @@
 #!/bin/bash
 # Auxmem pre-commit hook. Installed by bootstrap.sh as .git/hooks/pre-commit.
-# Validates staged .md files against the frontmatter schema.
+# Validates the staged git index snapshot (not the working tree).
 # Portable: bash 3.2+ (macOS default /bin/bash).
 
 set -euo pipefail
@@ -9,25 +9,18 @@ set -euo pipefail
 if [ "${AUXMEM_AUTOSYNC:-${VAULT_AUTOSYNC:-0}}" = "1" ]; then exit 0; fi
 
 AUXMEM_ROOT="$(git rev-parse --show-toplevel)"
-VALIDATOR="$AUXMEM_ROOT/.scripts/validate_auxmem.py"
+CHECKER="$AUXMEM_ROOT/.scripts/check_staged_snapshot.py"
 
-if [ ! -f "$VALIDATOR" ]; then
-    echo "pre-commit: validator not found at $VALIDATOR" >&2
+if [ ! -f "$CHECKER" ]; then
+    echo "pre-commit: staged snapshot checker not found at $CHECKER" >&2
     exit 1
 fi
 
-staged=()
-while IFS= read -r -d '' f; do
-    staged+=("$f")
-done < <(git diff --cached --name-only -z --diff-filter=ACMR -- '*.md' '72-tasks/todo.txt' '72-tasks/done.txt')
-
-if [ ${#staged[@]} -eq 0 ]; then
-    exit 0
-fi
-
-if ! python3 "$VALIDATOR" "${staged[@]}"; then
+if ! python3 "$CHECKER"; then
     echo ""
-    echo "Commit blocked. Try:  python3 .scripts/validate_auxmem.py --fix --all   for the mechanical fixes,"
-    echo "then ask your agent to handle the rest (see docs/FIXING.md), or bypass once with: git commit --no-verify"
+    echo "Commit blocked (staged snapshot failed). Try:"
+    echo "  python3 .scripts/gen_mocs.py && python3 .scripts/validate_auxmem.py --fix --all"
+    echo "then ask your agent to handle the rest (see docs/FIXING.md),"
+    echo "or bypass once with: git commit --no-verify"
     exit 1
 fi
