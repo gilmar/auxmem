@@ -1,6 +1,6 @@
-# Koinome
-
-**Knowledge in common.**
+<p align="center">
+  <img src="docs/images/koinome-readme-banner.svg" alt="Koinome — Knowledge in common. Governed corpora for humans and AI agents." width="100%">
+</p>
 
 Koinome is a governed knowledge system for humans and AI agents. Its unit is the **corpus**: a portable, governed body of knowledge belonging to a person, agent, project, team, community, or organisation. The `koinome` CLI creates and maintains corpora as plain Markdown on disk, with a deterministic validation gate.
 
