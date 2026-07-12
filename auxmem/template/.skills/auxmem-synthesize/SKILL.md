@@ -26,6 +26,7 @@ For each unsynthesized source and each stale page:
    - `sources:` — auxmem-root-relative paths (non-empty)
    - `generated_at:` today
    - `review: needed`
+   - `type` / `status` from `vocab` in `.scripts/auxmem.config.json`
 4. Make every claim traceable to a cited source. Record contradictions in "Open questions and contradictions"; do not silently resolve.
 5. Append `71-log/<today>-synthesis.md` (`type: log`): what was synthesized, from which sources, contradictions surfaced.
 6. `python3 .scripts/gen_mocs.py` then `python3 .scripts/validate_auxmem.py --all`. Fix failures (see `auxmem-fix-validation` skill).

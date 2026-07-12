@@ -15,8 +15,12 @@ This is a provider-independent work knowledge base in plain markdown. It is read
 Return metadata and summaries before full note bodies. Fetch a full body only when the summary is insufficient.
 
 ## Structure
-Domain folders are defined in `.scripts/auxmem.config.json`. Default set:
-- `10-data-hub`, `20-governance`, `30-team`, `40-stakeholders`, `50-exec`: subject-matter domains.
+Folder layout is defined in `.scripts/auxmem.config.json`. Read the current `domains` map and `structural_folders` list at session start (or whenever unsure). Never infer domain folder names or slugs from examples in other repos or older docs.
+
+- **Subject domains:** keys in `domains` (e.g. `10-projects`) map to slug values used in frontmatter and tasks. These are auxmem-specific.
+- **Structural folders:** shared paths such as inbox, decisions, tasks, MOCs, templates, and archive — exact list is in `structural_folders`.
+
+Common structural folders (confirm against config):
 - `60-decisions`: ADRs (MADR format). Read `60-decisions/index.md` for the log.
 - `70-meetings`: dated meeting and 1:1 notes.
 - `71-log`: dated session and daily work logs (append-only).
@@ -28,11 +32,10 @@ Domain folders are defined in `.scripts/auxmem.config.json`. Default set:
 - `00-inbox`: unsorted captures and import output.
 
 ## Frontmatter (every note has it)
-Required: `title`, `summary`, `type`, `status`, `domain`, `created`, `updated`.
-Controlled `type`: project-doc, governance-finding, quality-log, adr, meeting, 1on1, stakeholder, exec-doc, moc, reference, log.
-Controlled `status`: active, in-review, done, superseded, archived.
-`domain` must be one of the domain slugs in `.scripts/auxmem.config.json`.
-Use `summary` to judge relevance before reading the body. Front-load it with concrete nouns.
+Required fields, controlled vocabularies (`vocab.type`, `vocab.status`), and `min_summary_len` are defined in `.scripts/auxmem.config.json`. Never infer types, statuses, or domain slugs from examples — read the config.
+
+`domain` must be one of the slug values in `domains`.
+Use `summary` to judge relevance before reading the body. Front-load it with concrete nouns and meet the configured minimum length.
 
 ## Format rules (open-standard markdown only)
 - CommonMark plus GFM tables plus YAML frontmatter. Nothing else.
@@ -87,7 +90,9 @@ Do not weaken the gate; fix the note. Run `python3 .scripts/validate_auxmem.py -
 
 Reusable workflows live in `.skills/` (Agent Skills standard). `bootstrap.sh` links them into `.claude/skills`, `.codex/skills`, `.gemini/skills`, and `.cursor/skills` for provider discovery. Invoke explicitly (`/auxmem-skill-name`) or let the agent match by description. After creating an auxmem, run `auxmem-init` first to finish setup. Other skills encode this guide's workflows (session close, validation fix, synthesis, notes, ADRs, todos, weekly review, seed distillation, domain changes); this file stays canonical for rules.
 
+## When sources conflict
+Do not silently resolve contradictory sources. Retain both claims and their provenance; compare authority, scope, effective date, and explicit supersession; mark unresolved contradictions for review. Recency is one signal, never automatic authority. Never mark synthesized pages `review: approved` while a material contradiction remains. Full policy: `docs/CONFLICTS.md`. For single-source uncertainty, use "as of YYYY-MM-DD".
+
 ## Rules of thumb
 - Never invent metric, model, or system names. Check the relevant domain notes for exact names.
-- When sources conflict, the newest wins. Mark uncertainty with "as of <date>".
 - Keep this file under ~150 lines.

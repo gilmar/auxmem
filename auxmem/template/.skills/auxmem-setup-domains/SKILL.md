@@ -13,8 +13,7 @@ Ask what this auxmem is for: subject areas, active projects, teams, or stakehold
 
 Propose 3 to 6 domains as `NN-folder=slug`:
 
-- Folders numbered in tens: `10-projects`, `20-governance`, ...
-- Slugs lowercase, digits, hyphens only
+- Folder keys numbered in tens (`10-…`, `20-…`, …); slugs lowercase, digits, hyphens only
 - First domain is primary (used in ADR-0001, initial tasks, seed content)
 - One sentence of rationale per domain
 

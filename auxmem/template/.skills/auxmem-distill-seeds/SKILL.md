@@ -15,11 +15,13 @@ Staging corpus lives **outside** the auxmem in `seed-staging/`. Output is 15–3
 
 ## Produce
 
-- Domain notes in populated `10-*`–`50-*` folders
+- Domain notes in each populated subject folder from `domains` in `.scripts/auxmem.config.json`
 - ADRs in `60-decisions/` from ADR-0002 onward (0001 is the auxmem itself)
 - `80-moc/home-moc.md` plus domain MOCs linking every seed
 - `71-log/<today>-auxmem-bootstrap.md`
 - `72-tasks/todo.txt` for open commitments (todo.txt grammar, creation date = today)
+
+When sources conflict, follow `docs/CONFLICTS.md` — do not silently pick the newest claim.
 
 ## Hard rules
 

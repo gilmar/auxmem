@@ -15,14 +15,10 @@ the auxmem, valid against the auxmem schema.
    prompts only). Read selectively based on the index.
 
 ## What to produce
-Synthesize CURRENT STATE, not history. Transcripts are evidence of what was true
-at some point; prefer recent over old, and when sources conflict, the newest wins.
-Target 15 to 30 seed notes total:
+Synthesize CURRENT STATE, not history. Transcripts are evidence of what was true at some point; prefer recent material when triaging, but when sources conflict do not pick a silent winner — follow `docs/CONFLICTS.md` (retain both claims, flag for review).
 
-- `10-data-hub/`: one overview note per major system or component discussed.
-- `20-governance/`: one note per active governance workstream or standing finding.
-- `40-stakeholders/`: one profile per recurring stakeholder team or delivery.
-- `50-exec/`: one note per active executive artifact or business case.
+Read subject domain folders from `domains` in `.scripts/auxmem.config.json`. Target 15 to 30 seed notes total, distributed across populated domain folders, plus:
+
 - `60-decisions/`: one ADR per durable decision found in the corpus, MADR format,
   numbered from ADR-0002 (ADR-0001 documents the auxmem itself). If a decision was
   later reversed in the corpus, record both with supersession, not just the winner.
