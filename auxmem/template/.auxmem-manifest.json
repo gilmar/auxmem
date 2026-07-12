@@ -13,6 +13,10 @@
       "policy": "merge",
       "sha256": "84e6b9dcdf924ccbed905635ae94e18085938fe1e69281f7a6640f86dd2940fd"
     },
+    ".scripts/check_staged_snapshot.py": {
+      "policy": "overwrite",
+      "sha256": "3bee31e4d1ad3551217b10a745bd02bea6090ebf56197bdc13bd44aa86888df3"
+    },
     ".scripts/gen_mocs.py": {
       "policy": "overwrite",
       "sha256": "a59a64d66af43c0576ae1f9f4941c9973313d29d4186b9bc0e6ae878eba61ba0"
@@ -23,7 +27,7 @@
     },
     ".scripts/pre-commit": {
       "policy": "overwrite",
-      "sha256": "0c31d3a9f2193d63605fe3ab61982d6c4c5fba3b976b006d4533b7c166eea1c2"
+      "sha256": "424b953873450382b9c9b65e6d4f8bdcf47412dc8cc6499e22cdc7cd72cdb8d8"
     },
     ".scripts/synthesis_status.py": {
       "policy": "overwrite",
