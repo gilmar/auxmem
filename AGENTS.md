@@ -51,7 +51,9 @@ uv run python auxmem-cli new --name t --path /tmp/t-test
 | Full repository check | `bash scripts/check_repo.sh` |
 | Regenerate template manifest | `uv run python build_manifest.py` |
 | Shell lint | `bash scripts/lint-shell.sh` |
+| Full release gate | `bash scripts/check_release.sh` |
 | Bump template version | edit `auxmem/version.py` (`TEMPLATE_VERSION`), then `build_manifest.py` |
+| Bump conformance version | edit `auxmem/version.py` (`CONFORMANCE_VERSION`), then `build_manifest.py` |
 | Bump CLI version | edit `pyproject.toml` and `auxmem/__init__.py` (`__version__`) — keep both in sync |
 
 **Versioning is paused at 0.0.0.** Do not bump versions unless the user explicitly asks to resume versioning.
@@ -79,7 +81,8 @@ For CI, prefer [PyPI Trusted Publishing](https://docs.pypi.org/trusted-publisher
 
 - Managed folders are **auxmems**; reserve **vault** for Obsidian import sources only.
 - CLI product name **AuxMem Manager** appears only in `--help`, `pyproject.toml` description, and the README anchor block — elsewhere write “the `auxmem` CLI”.
-- Template and CLI versions are tracked separately; `auxmem upgrade` migrates existing auxmems to newer template versions.
+- Template, conformance, and CLI versions are tracked separately; see `docs/RELEASE.md` and `docs/COMPATIBILITY.md`.
+- `auxmem upgrade` migrates existing auxmems to newer template versions.
 - Keep changes focused; match existing style in surrounding files.
 
 ## Key paths
@@ -91,4 +94,6 @@ For CI, prefer [PyPI Trusted Publishing](https://docs.pypi.org/trusted-publisher
 | `auxmem/paths.py` | legacy 1.x file rename map |
 | `auxmem/upgrade.py` | template upgrade logic |
 | `build_manifest.py` | manifest generator |
+| `docs/RELEASE.md` | release and version policy |
+| `docs/COMPATIBILITY.md` | supported environments matrix |
 | `docs/USAGE.md` | user-facing command reference |

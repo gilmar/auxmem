@@ -1,5 +1,6 @@
 {
   "template_version": "0.0.0",
+  "conformance_version": "0.0.0",
   "files": {
     ".github/workflows/auxmem-check.yml": {
       "policy": "overwrite",
