@@ -1,12 +1,12 @@
 # Agent evaluation results (template)
 
-No multi-provider agent benchmark has been run to completion in CI. Deterministic evaluation runs in every `check_release.sh` via `uv run python -m corpus.evaluation`.
+No multi-provider agent benchmark has been run to completion in CI. Deterministic evaluation runs in every `check_release.sh` via `uv run python -m koinome.evaluation`.
 
 ## Deterministic results (automated)
 
 | date | command | outcome |
 | --- | --- | --- |
-| 2026-07-12 | `uv run python -m corpus.evaluation` | pass on all three reference corpora |
+| 2026-07-12 | `uv run python -m koinome.evaluation` | pass on all three reference corpora |
 
 ## Agent-assisted results (manual)
 

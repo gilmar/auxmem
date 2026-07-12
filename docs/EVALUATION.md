@@ -7,7 +7,7 @@ Koinome evaluation separates **deterministic guarantees** (validator, conformanc
 Run on all reference corpora:
 
 ```bash
-uv run python -m corpus.evaluation
+uv run python -m koinome.evaluation
 ```
 
 Included in the release gate via `bash scripts/check_release.sh`.

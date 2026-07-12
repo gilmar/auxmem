@@ -41,6 +41,6 @@ echo "== compatibility smoke =="
 bash scripts/compatibility_smoke.sh
 
 echo "== reference corpus evaluation =="
-uv run python -m corpus.evaluation
+uv run python -m koinome.evaluation
 
 echo "check_release.sh: all release checks passed"

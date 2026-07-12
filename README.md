@@ -97,7 +97,7 @@ See [docs/USAGE.md](docs/USAGE.md) for full reference.
 
 ## Migrating from AuxMem
 
-If you have an existing Koinome folder, run `koinome upgrade` — see [docs/MIGRATION.md](docs/MIGRATION.md).
+If you have an existing AuxMem folder, run `koinome upgrade` — see [docs/MIGRATION.md](docs/MIGRATION.md).
 
 ## Licence
 

@@ -17,6 +17,9 @@ ALLOWLIST_PATHS = {
     "docs/MIGRATION.md",
     "CHANGELOG.md",
     "README.md",
+    "AGENTS.md",
+    "docs/RELEASE.md",
+    "docs/COMPATIBILITY.md",
     "koinome/paths.py",
     "tests/test_naming_consistency.py",
 }
@@ -28,6 +31,9 @@ FORBIDDEN_PATTERNS = [
     re.compile(r"\ban auxmem\b", re.I),
     re.compile(r"\bauxmems\b", re.I),
 ]
+
+# Package modules live under koinome/, not corpus/ (managed folders are corpora).
+WRONG_MODULE_INVOCATION = re.compile(r"python(?:3)? -m corpus\.", re.I)
 
 SKIP_DIRS = {".git", ".venv", "build", "dist", "__pycache__", ".pytest_cache", "auxmem.egg-info", "koinome.egg-info"}
 TEXT_SUFFIXES = {".py", ".md", ".json", ".sh", ".toml", ".yml", ".yaml", ".txt", ".systemd", ".service", ".timer"}
@@ -56,6 +62,18 @@ def test_no_obsolete_names_outside_allowlist():
                 violations.append(f"{rel} matched {pattern.pattern}")
                 break
     assert not violations, "obsolete names found:\n" + "\n".join(violations[:40])
+
+
+def test_no_wrong_corpus_module_invocations():
+    violations: list[str] = []
+    for rel, path in _iter_text_files(REPO_ROOT):
+        text = path.read_text(encoding="utf-8", errors="replace")
+        if WRONG_MODULE_INVOCATION.search(text):
+            violations.append(rel)
+    assert not violations, (
+        "use python -m koinome.<module>, not python -m corpus.<module>:\n"
+        + "\n".join(violations[:40])
+    )
 
 
 def test_readme_states_free_open_source_commitment():

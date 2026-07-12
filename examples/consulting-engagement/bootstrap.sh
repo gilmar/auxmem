@@ -173,7 +173,7 @@ PY
 then
   python3 .scripts/gen_mocs.py
 else
-  echo "  skipped (no domains yet; run the corpus-init skill first)"
+  echo "  skipped (no domains yet; run the koinome-init skill first)"
 fi
 
 echo "== 7. validate =="
@@ -194,9 +194,9 @@ then
     exit 1
   fi
 else
-  echo "  skipped (no domains yet; run the corpus-init skill first)"
+  echo "  skipped (no domains yet; run the koinome-init skill first)"
   echo ""
   echo "Bootstrap complete. Next steps:"
-  echo "  - point your agent at this corpus and run the corpus-init skill"
+  echo "  - point your agent at this corpus and run the koinome-init skill"
   echo "  - then set your git remote and push (see docs/SETUP.md)"
 fi

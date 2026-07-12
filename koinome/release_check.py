@@ -90,7 +90,7 @@ def check_cli_version_consistency() -> CheckResult:
         return CheckResult(
             "cli-version",
             False,
-            f"pyproject.toml ({pyproject}) != corpus.__version__ ({__version__})",
+            f"pyproject.toml ({pyproject}) != koinome.__version__ ({__version__})",
         )
     return CheckResult("cli-version", True, pyproject)
 

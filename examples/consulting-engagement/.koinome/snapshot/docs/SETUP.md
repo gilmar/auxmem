@@ -34,7 +34,7 @@ On WSL2, keep the corpus on the Linux filesystem (`~/my-corpus`), not `/mnt/c`, 
 
 ## 2. Copy and configure
 ```bash
-cp -r corpus-template ~/my-corpus && cd ~/my-corpus
+cp -r koinome/template ~/my-corpus && cd ~/my-corpus
 ```
 Edit `.scripts/koinome.config.json` if this corpus needs different domains. This file is the single source of truth. The `domains` map (folder to slug) drives folder creation, the `domain` frontmatter vocabulary, and MOC generation. Keep `type` and `status` closed unless you have a reason; they are the retrieval contract agents depend on. If you change domains after notes exist, see "Reconfiguring domains" below.
 

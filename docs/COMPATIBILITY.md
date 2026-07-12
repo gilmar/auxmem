@@ -75,4 +75,4 @@ Bump conformance when validator rules change what constitutes a valid note. Docu
 
 ## PyPI history
 
-The mistaken `corpus==2.0.0` index release is **unsupported**. See `docs/RELEASE.md` before the first intentional publish.
+The mistaken `auxmem==2.0.0` index release is **unsupported**. See `docs/RELEASE.md` before the first intentional publish.

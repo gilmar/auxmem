@@ -258,20 +258,20 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.json:
         payload = {
-            r.koinome: {res.name: {"ok": res.ok, "detail": res.detail} for res in r.results}
+            r.corpus: {res.name: {"ok": res.ok, "detail": res.detail} for res in r.results}
             for r in reports
         }
         print(json.dumps(payload, indent=2))
     else:
         for report in reports:
-            print(f"== {report.koinome} ==")
+            print(f"== {report.corpus} ==")
             for res in report.results:
                 status = "ok" if res.ok else "FAIL"
                 suffix = f" ({res.detail})" if res.detail else ""
                 print(f"  [{status}] {res.name}{suffix}")
 
     if failed:
-        print(f"\nevaluation failed for: {', '.join(r.koinome for r in failed)}", file=sys.stderr)
+        print(f"\nevaluation failed for: {', '.join(r.corpus for r in failed)}", file=sys.stderr)
         return 1
     print("\ndeterministic evaluation passed")
     return 0

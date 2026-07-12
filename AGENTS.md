@@ -35,8 +35,9 @@ If you accidentally commit on `master`, move the commit to a feature branch (`gi
 ## Setup
 
 ```bash
-uv sync --group dev
+uv sync --group dev   # install package + pytest, ruff, etc.
 uv run koinome --help
+bash scripts/check_repo.sh   # full verification (tests, lint, build, smoke)
 ```
 
 Run without installing globally:
@@ -49,10 +50,17 @@ uv run python koinome-cli new --name t --path /tmp/t-test
 
 | task | command |
 | --- | --- |
+| Full repository check | `bash scripts/check_repo.sh` |
 | Regenerate template manifest | `uv run python build_manifest.py` |
 | Shell lint | `bash scripts/lint-shell.sh` |
+| Full release gate | `bash scripts/check_release.sh` |
+| Reference corpus evaluation | `uv run python -m koinome.evaluation` |
+| Rebuild reference examples | `uv run python examples/build_references.py` |
 | Bump template version | edit `koinome/version.py` (`TEMPLATE_VERSION`), then `build_manifest.py` |
+| Bump conformance version | edit `koinome/version.py` (`CONFORMANCE_VERSION`), then `build_manifest.py` |
 | Bump CLI version | edit `pyproject.toml` and `koinome/__init__.py` (`__version__`) — keep both in sync |
+
+**Versioning is paused at 0.0.0.** Do not bump versions unless the user explicitly asks to resume versioning.
 
 After template changes, regenerate `.koinome-manifest.json` before committing.
 
@@ -62,14 +70,23 @@ After template changes, regenerate `.koinome-manifest.json` before committing.
 # bump versions in pyproject.toml, koinome/__init__.py, koinome/version.py
 uv run python build_manifest.py
 uv build
-uv publish --token pypi-<token> # or: UV_PUBLISH_TOKEN=pypi-... uv publish
+uv publish --token pypi-<token>    # or: UV_PUBLISH_TOKEN=pypi-... uv publish
 ```
+
+Test on TestPyPI first when unsure:
+
+```bash
+uv publish --publish-url https://test.pypi.org/legacy/ --token pypi-...
+```
+
+For CI, prefer [PyPI Trusted Publishing](https://docs.pypi.org/trusted-publishers/) with `uv publish` (no long-lived token).
 
 ## Conventions
 
 - Managed knowledge collections are **corpora**; reserve **vault** for Obsidian import sources only.
 - CLI product name **Koinome CLI** appears only in `--help`, `pyproject.toml` description, and the README anchor block — elsewhere write “the `koinome` CLI”.
-- Template and CLI versions are tracked separately; `koinome upgrade` migrates existing corpora to newer template versions.
+- Template, conformance, and CLI versions are tracked separately; see `docs/RELEASE.md` and `docs/COMPATIBILITY.md`.
+- `koinome upgrade` migrates existing corpora to newer template versions.
 - Keep changes focused; match existing style in surrounding files.
 
 ## Key paths
@@ -78,7 +95,10 @@ uv publish --token pypi-<token> # or: UV_PUBLISH_TOKEN=pypi-... uv publish
 | --- | --- |
 | `koinome/cli.py` | CLI entry and help |
 | `koinome/template/` | versioned Koinome template |
-| `koinome/paths.py` | corpus path resolution and legacy Koinome migration |
+| `koinome/paths.py` | corpus path resolution and legacy AuxMem migration |
 | `koinome/upgrade.py` | template upgrade logic |
 | `build_manifest.py` | manifest generator |
+| `docs/RELEASE.md` | release and version policy |
+| `docs/COMPATIBILITY.md` | supported environments matrix |
+| `docs/EVALUATION.md` | reference corpus and evaluation methodology |
 | `docs/USAGE.md` | user-facing command reference |

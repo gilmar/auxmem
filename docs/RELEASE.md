@@ -28,7 +28,7 @@ bash scripts/check_release.sh
 bash scripts/check_release.sh --target-version 0.1.0rc1
 ```
 
-`check_release.sh` runs `check_repo.sh`, `python -m corpus.release_check --strict`, and `compatibility_smoke.sh`.
+`check_release.sh` runs `check_repo.sh`, `python -m koinome.release_check --strict`, and `compatibility_smoke.sh`.
 
 Local iteration with uncommitted changes:
 
@@ -44,7 +44,7 @@ Before the first intentional public release, choose one strategy and verify it:
 
 ### Option A — Yank mistaken release (recommended if index allows)
 
-1. Yank `corpus==2.0.0` on PyPI (and TestPyPI if applicable).
+1. Yank `auxmem==2.0.0` on PyPI (and TestPyPI if applicable).
 2. Publish the first intentional release as `0.1.0rc1` or `0.1.0` after hardening is complete.
 3. Verify resolution:
 
@@ -63,7 +63,7 @@ pip install 'corpus>=0.1.0' --dry-run
 ## Pre-publish checklist
 
 - `bash scripts/check_release.sh`
-- `uv run python -m corpus.evaluation`
+- `uv run python -m koinome.evaluation`
 - `docs/COMPATIBILITY.md` updated if support claims change
 - `CHANGELOG.md` entry for the release version
 - Confirm template manifest is fresh (`uv run python build_manifest.py`)

@@ -9,7 +9,7 @@ from tests.helpers import REPO_ROOT
 def test_evaluate_all_references_pass():
     reports = evaluate_all_references(REPO_ROOT / "examples")
     failed = [r for r in reports if not r.passed]
-    assert not failed, ", ".join(r.koinome for r in failed)
+    assert not failed, ", ".join(r.corpus for r in failed)
 
 
 def test_evaluation_docs_exist():

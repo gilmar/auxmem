@@ -31,7 +31,7 @@ STRUCTURAL_NOTES = {
 
 
 def _banner():
-    print(f"{BOLD}corpus{RESET} {DIM}create a governed memory folder for your AI agents{RESET}\n")
+    print(f"{BOLD}Koinome{RESET} {DIM}create a governed memory folder for your AI agents{RESET}\n")
     print(
         "You are about to create a corpus: a folder of plain markdown notes with a "
         "validator, a git hook, and agent skills. Your agents read and write it; "
@@ -142,7 +142,7 @@ def run():
     print("Next steps:")
     print(f"  1. cd {dest}")
     print("  2. Point your agent at this folder (claude, codex, or gemini)")
-    print("     Run the corpus-init skill — it interviews you, sets up domains, and finishes setup.")
+    print("     Run the koinome-init skill — it interviews you, sets up domains, and finishes setup.")
     print("  3. Optional: set a private git remote and push")
     print("     git remote add origin <url>")
     print("     git add -A && git commit -m 'initial corpus' && git push -u origin main")
