@@ -1,6 +1,6 @@
 [project]
 name = "koinome"
-version = "0.0.0"
+version = "0.0.0alpha1"
 description = "Koinome CLI: create and maintain provider-independent, agent-readable markdown corpora."
 readme = "README.md"
 license = "MIT"
