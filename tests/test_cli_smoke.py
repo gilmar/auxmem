@@ -52,6 +52,25 @@ def test_new_creates_scaffold(tmp_path):
     assert (dest / ".koinome" / "manifest.json").is_file()
 
 
+def test_init_creates_scaffold_like_new(tmp_path):
+    dest = tmp_path / "via-init"
+    result = run_koinome(
+        [
+            "init",
+            "--name",
+            "via-init",
+            "--path",
+            str(dest),
+            "--domain",
+            "10-projects=projects",
+        ]
+    )
+    assert result.returncode == 0, result.stderr
+    assert dest.is_dir()
+    assert (dest / ".scripts" / "koinome.config.json").is_file()
+    assert (dest / ".koinome" / "manifest.json").is_file()
+
+
 def test_doctor_validates_scaffold(tmp_corpus):
     result = run_koinome(["doctor", str(tmp_corpus)])
     assert result.returncode == 0, result.stdout + result.stderr

@@ -28,6 +28,10 @@ Published in error before the repository reset source versions to `0.0.0`. Not a
 
 ## Unreleased — hardening cycle (template 0.0.0, conformance 0.0.0)
 
+- Relicensed repository **MIT → Apache-2.0** per [strategy](docs/STRATEGY.md) D6; added DCO via [CONTRIBUTING.md](CONTRIBUTING.md) (no CLA). Published PyPI **`0.0.0alpha1`** remains MIT metadata; the next release carries Apache-2.0.
+- Published [docs/STRATEGY.md](docs/STRATEGY.md); realigned README, comparisons, usage, evaluation, and governance ([SECURITY.md](SECURITY.md)).
+- `koinome init` as an alias for `koinome new` (strategy demo naming).
+
 Reliability and release-hardening work on `master` after the version reset:
 
 - Validator and git gates (staged snapshot, exit codes, conformance check)

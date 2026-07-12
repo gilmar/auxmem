@@ -2,6 +2,8 @@
 
 This repo is the **Koinome** CLI and versioned Koinome template (`koinome/` package). It is not a corpus itself — do not run corpus validation or bootstrap here unless testing scaffold output.
 
+**[docs/STRATEGY.md](docs/STRATEGY.md)** is the source of truth for positioning, terminology, and honest-scope rules when editing docs.
+
 Use **uv** for Python environment, builds, and PyPI releases.
 
 ## Git workflow

@@ -1,9 +1,9 @@
 [project]
 name = "koinome"
 version = "0.0.0alpha1"
-description = "Koinome CLI: create and maintain provider-independent, agent-readable markdown corpora."
+description = "Koinome CLI: local-first, governed knowledge corpora for humans and AI agents."
 readme = "README.md"
-license = "MIT"
+license = "Apache-2.0"
 requires-python = ">=3.10"
 dependencies = ["pyyaml>=6.0"]
 

@@ -1,5 +1,7 @@
 # Transform AuxMem into Koinome
 
+> **Executed.** This plan was completed; **[docs/STRATEGY.md](../../STRATEGY.md)** supersedes its licensing, scope, and commercial-edition guidance.
+
 You are working in the repository:
 
 `https://github.com/gilmar/koinome`

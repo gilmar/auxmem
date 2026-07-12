@@ -1,20 +1,35 @@
 # Koinome
 
-**Koinome is a local-first, plain-Markdown system for creating and maintaining a personal knowledge corpus for a person and their AI agents, with a deterministic validation gate.**
+**Knowledge in common.**
 
-> **Koinome** is the product and tooling. A **corpus** is a portable, governed body of knowledge maintained by an individual and usable by that individual and their authorised AI agents. The `koinome` command creates and maintains corpora.
+Koinome is a governed knowledge system for humans and AI agents. Its unit is the **corpus**: a portable, governed body of knowledge belonging to a person, agent, project, team, community, or organisation. The `koinome` CLI creates and maintains corpora as plain Markdown on disk, with a deterministic validation gate.
 
-Koinome currently provides a complete local-first corpus for individual use.
-
-The individual corpus and its local tooling are free and open-source and are intended to remain so.
+Sharing is the point: knowledge should be contributed, combined, merged, split, transferred, and federated across boundaries—with provenance and policy, not silent copies. Today's release is the foundation for that thesis: a complete **local-first** product for **individual** corpora ([strategy D1](docs/STRATEGY.md)). Read the full strategy in **[docs/STRATEGY.md](docs/STRATEGY.md)**.
 
 ## Current scope
 
-The current Koinome release manages individual corpora, one corpus at a time. Cross-corpus sharing, transfer, combination, and federation are not implemented.
+The current Koinome release manages individual corpora, **one corpus at a time**. **Cross-corpus** operations (share, contribute, transfer, merge, split, combine, federate, and the rest) are design scope and proceed via public RFCs—they are **not** shipped software.
+
+## Commitments
+
+These match [strategy §5](docs/STRATEGY.md):
+
+- **Local-first.** A corpus is a directory of plain files. It works offline without Koinome running.
+- **Individual use is account-free, forever.** No sign-up, login, or hosted dependency for local use.
+- **No telemetry.** Not opt-out, not anonymised.
+- **Human-approved persistence.** Nothing becomes canonical without deterministic validation and explicit approval.
+- **Nothing crosses a boundary silently.** Every movement between corpora is an approved operation that leaves a receipt (design scope until operations ship).
+- **The AI proposes; it never decides.**
+- **Complete and free.** Individual corpus tooling is and will remain complete, free, and open-source—not a trial or funnel.
+- **Portable by construction.** CommonMark and YAML remain useful if Koinome is deleted tomorrow.
+
+## The claim
+
+Koinome argues that today's AI memory products are **single-principal by architecture**—one owner, one boundary—not a missing feature. The essay and checkable claim are in [strategy §3](docs/STRATEGY.md).
 
 ## Free and open-source commitment
 
-Koinome for individual use is a complete local-first product, not a limited edition of a hosted service. The individual corpus format, local tooling, validation, agent workflows, imports, exports, synthesis, migration, synchronisation, backup, and recovery are free and open-source and are intended to remain so.
+Koinome for individual use is a complete local-first product, not a limited edition of a hosted service. The individual corpus format, local tooling, validation, agent workflows, imports, exports, synthesis, migration, synchronisation, backup, and recovery are **free and open-source** and are intended to remain so.
 
 You can create, maintain, and use local corpora without a Koinome account, subscription, or hosted service.
 
@@ -51,13 +66,14 @@ The files are the product. Three commitments follow:
 
 # or install the command
 pipx install .        # or: uv tool install .
-koinome new
+koinome new           # or: koinome init (same scaffold today)
 ```
 
 Interactive, or fully scriptable:
 
 ```bash
 koinome new --name my-work --path ~/my-work
+# equivalent: koinome init --name my-work --path ~/my-work
 ```
 
 Or pass domains when the layout is already known:
@@ -73,7 +89,7 @@ This creates the corpus, installs the git hook, and sets up shared folders. Poin
 ## End-to-end individual workflow
 
 1. **Install** — `uv tool install .` or run `./koinome-cli`.
-2. **Create a corpus** — `koinome new --name my-corpus --path ~/my-corpus`.
+2. **Create a corpus** — `koinome new` or `koinome init` with `--name` and `--path`.
 3. **Connect an agent** — open the corpus in Claude Code, Codex, Gemini CLI, or Cursor; run `koinome-init`.
 4. **Author or import** — add notes, import exports with `koinome seed`, or distill seeds with `koinome-distill-seeds`.
 5. **Validate** — `koinome doctor ~/my-corpus` or `python3 .scripts/validate_corpus.py --all` inside the corpus.
@@ -88,6 +104,7 @@ This creates the corpus, installs the git hook, and sets up shared folders. Poin
 | command | what it does |
 | --- | --- |
 | `koinome new` | Create a new corpus |
+| `koinome init` | Same as `new` today (strategy demo name; richer semantics planned) |
 | `koinome seed` | Normalise a provider export to an import staging area |
 | `koinome doctor CORPUS` | Validate a corpus and refresh navigation maps |
 | `koinome check CORPUS` | Read-only conformance check (CI-safe) |
@@ -101,4 +118,4 @@ If you have an existing AuxMem folder, run `koinome upgrade` — see [docs/MIGRA
 
 ## Licence
 
-MIT — see [LICENSE](LICENSE).
+Apache License 2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE). Contributions are accepted under the [Developer Certificate of Origin](https://developercertificate.org/); there is no CLA. See [CONTRIBUTING.md](CONTRIBUTING.md).
