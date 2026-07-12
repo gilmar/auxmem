@@ -36,9 +36,36 @@ Local iteration with uncommitted changes:
 ALLOW_DIRTY_TREE=1 bash scripts/check_release.sh
 ```
 
+## Package registry
+
+The PyPI package name is **`koinome`** (`pyproject.toml` `name`). Verify availability before the first publish:
+
+```bash
+bash scripts/check_pypi_registry.sh
+```
+
+As of the Koinome rename:
+
+| index | `koinome` | `auxmem` (legacy) |
+| --- | --- | --- |
+| PyPI | available (404) | occupied (`0.1.0`, mistaken `2.0.0`) |
+| TestPyPI | available (404) | available (404) |
+
+Publish **only** `koinome`. Do not ship new Koinome releases under the legacy `auxmem` project name. Because `koinome` is a new PyPI project, the first intentional release can be `0.1.0rc1` or `0.1.0` without competing with `auxmem==2.0.0`.
+
+Recommended first upload (TestPyPI, after `bash scripts/check_release.sh` passes and versions are bumped):
+
+```bash
+uv build
+uv publish --publish-url https://test.pypi.org/legacy/ --token pypi-...
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ koinome
+```
+
+Production publish uses `uv publish` (see [PyPI Trusted Publishing](https://docs.pypi.org/trusted-publishers/) in `AGENTS.md`).
+
 ## Mistaken 2.0.0 publication
 
-The package index previously received a mistaken `2.0.0` release before the repository reset source versions to `0.0.0`.
+The legacy **`auxmem`** project on PyPI (not `koinome`) received a mistaken `2.0.0` release before the repository reset source versions to `0.0.0`.
 
 Before the first intentional public release, choose one strategy and verify it:
 
@@ -49,14 +76,14 @@ Before the first intentional public release, choose one strategy and verify it:
 3. Verify resolution:
 
 ```bash
-pip index versions corpus
-pip install 'corpus>=0.1.0' --dry-run
+pip index versions koinome
+pip install 'koinome>=0.1.0' --dry-run
 ```
 
 ### Option B — Continue above 2.0.0
 
 1. Bump to `2.0.1` or `2.1.0` in `pyproject.toml`, `koinome/__init__.py`, and template/conformance versions together.
-2. Verify `pip install corpus` resolves to the new version, not the mistaken `2.0.0` artifact.
+2. Verify `pip install koinome` resolves to the new version, not the mistaken `auxmem==2.0.0` artifact on the legacy project page.
 
 **Never** publish `0.0.0` or any version lower than an existing PyPI release without verifying index resolution in a clean environment.
 
@@ -67,4 +94,4 @@ pip install 'corpus>=0.1.0' --dry-run
 - `docs/COMPATIBILITY.md` updated if support claims change
 - `CHANGELOG.md` entry for the release version
 - Confirm template manifest is fresh (`uv run python build_manifest.py`)
-- Verify PyPI/TestPyPI resolution in a clean venv
+- Verify PyPI/TestPyPI resolution in a clean venv (`bash scripts/check_pypi_registry.sh` before first publish)
