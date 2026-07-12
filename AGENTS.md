@@ -51,6 +51,7 @@ uv run python koinome-cli new --name t --path /tmp/t-test
 | task | command |
 | --- | --- |
 | Full repository check | `bash scripts/check_repo.sh` |
+| PyPI name availability | `bash scripts/check_pypi_registry.sh` |
 | Regenerate template manifest | `uv run python build_manifest.py` |
 | Shell lint | `bash scripts/lint-shell.sh` |
 | Full release gate | `bash scripts/check_release.sh` |

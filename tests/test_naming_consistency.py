@@ -13,6 +13,7 @@ ALLOWLIST_PATHS = {
     "docs/plans/closed/rebrand-plan.md",
     "scripts/apply_rebrand.py",
     "scripts/apply_koinome_transform.py",
+    "scripts/check_pypi_registry.sh",
     "tests/test_koinome_migration.py",
     "docs/MIGRATION.md",
     "CHANGELOG.md",
