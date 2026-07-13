@@ -20,6 +20,9 @@ from pathlib import Path
 
 import yaml
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import schema_validate  # noqa: E402
+
 # ---------------------------------------------------------------- config ----
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -184,6 +187,7 @@ def check_frontmatter(fm):
     if fm.get("tags") is not None and not isinstance(fm.get("tags"), list):
         errors.append("tags must be a YAML list, e.g. tags: [semantic-layer]")
     errors.extend(check_synthesis(fm))
+    errors.extend(schema_validate.validate_v0_frontmatter(fm))
     return errors
 
 

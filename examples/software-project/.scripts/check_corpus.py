@@ -5,7 +5,8 @@ Runs, in order:
   1. validate_corpus.py --all
   2. gen_mocs.py --check
   3. optional manifest tooling presence (--manifest)
-  4. optional git cleanliness (--git)
+  4. optional corpus identity manifest (--corpus-identity)
+  5. optional git cleanliness (--git)
 
 Never modifies files. Exit 0 = conformant. Exit 1 = failed check.
 """
@@ -20,6 +21,8 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 CORPUS_ROOT = SCRIPT_DIR.parent
+sys.path.insert(0, str(SCRIPT_DIR))
+import schema_validate  # noqa: E402
 
 _MANIFEST_TOOLING = (
     ".scripts/validate_corpus.py",
@@ -92,6 +95,18 @@ def check_manifest(root: Path) -> tuple[int, str]:
     return 0, "manifest tooling integrity ok"
 
 
+def check_corpus_identity(root: Path) -> tuple[int, str]:
+    path = root / "koinome.corpus.yaml"
+    doc, err = schema_validate.load_corpus_identity_yaml(path)
+    if err:
+        return 1, f"corpus identity check failed: {err}"
+    assert doc is not None
+    errors = schema_validate.validate_corpus_identity(doc)
+    if errors:
+        return 1, "corpus identity check failed:\n" + "\n".join(f"  - {e}" for e in errors)
+    return 0, "corpus identity manifest ok"
+
+
 def check_git_clean(root: Path) -> tuple[int, str]:
     if not (root / ".git").is_dir():
         return 1, "git check failed: not a git repository"
@@ -113,6 +128,7 @@ def run_checks(
     root: Path,
     *,
     manifest: bool = False,
+    corpus_identity: bool = False,
     git: bool = False,
 ) -> tuple[int, list[str]]:
     """Run conformance checks. Returns (exit_code, human-readable report lines)."""
@@ -134,6 +150,12 @@ def run_checks(
         if rc != 0:
             return rc, lines
 
+    if corpus_identity:
+        rc, msg = check_corpus_identity(root)
+        lines.append(msg)
+        if rc != 0:
+            return rc, lines
+
     if git:
         rc, msg = check_git_clean(root)
         lines.append(msg)
@@ -147,8 +169,9 @@ def run_checks(
 def main(argv: list[str] | None = None) -> int:
     args = list(argv or sys.argv[1:])
     manifest = "--manifest" in args
+    corpus_identity = "--corpus-identity" in args
     git = "--git" in args
-    rc, lines = run_checks(CORPUS_ROOT, manifest=manifest, git=git)
+    rc, lines = run_checks(CORPUS_ROOT, manifest=manifest, corpus_identity=corpus_identity, git=git)
     print("\n".join(lines))
     return rc
 

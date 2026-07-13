@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koinome.dev/schemas/v0/record-common.schema.json",
+  "title": "Koinome v0 record common frontmatter",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["title", "summary", "type", "status", "domain", "created", "updated"],
+  "properties": {
+    "title": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string", "minLength": 1 },
+    "type": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["active", "in-review", "done", "superseded", "archived", "accepted", "proposed"]
+    },
+    "domain": { "type": "string", "minLength": 1 },
+    "created": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "updated": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "prov:wasDerivedFrom": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "prov:wasAttributedTo": { "type": "string" },
+    "prov:wasGeneratedBy": { "type": "string" },
+    "prov:generatedAtTime": { "type": "string", "minLength": 1 },
+    "odrl:permission": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "action": { "type": "string" },
+          "assignee": { "type": "string" }
+        }
+      }
+    },
+    "odrl:prohibition": {
+      "type": "array",
+      "items": { "type": "object", "additionalProperties": true }
+    },
+    "odrl:duty": {
+      "type": "array",
+      "items": { "type": "object", "additionalProperties": true }
+    },
+    "supersedes": {
+      "type": ["string", "null"]
+    }
+  }
+}

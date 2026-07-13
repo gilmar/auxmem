@@ -10,6 +10,7 @@ import subprocess
 from datetime import date
 from pathlib import Path
 
+from .corpus_identity import write_identity_manifest
 from .version import TEMPLATE_VERSION
 
 _PKG_ROOT = Path(__file__).resolve().parent
@@ -119,6 +120,7 @@ def scaffold(name, dest, domains, run_bootstrap=True, stream_bootstrap=False):
 
     # write the upgrade state: manifest + pristine snapshot (merge base)
     write_corpus_state(dest)
+    write_identity_manifest(dest, corpus_name=name)
 
     result = {"dest": dest, "domains": domains, "bootstrapped": False}
     if run_bootstrap:

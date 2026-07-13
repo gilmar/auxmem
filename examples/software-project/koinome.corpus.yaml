@@ -1,0 +1,22 @@
+format_version: '0'
+corpus_id: 8822af98-2699-44bf-a469-4c1f13b0d8f5
+created_at: '2026-07-12T22:12:22+00:00'
+owner:
+  id: urn:koinome:owner:payments-platform
+  label: Corpus owner
+steward:
+  id: urn:koinome:steward:payments-platform
+  label: Corpus steward
+boundary_policies:
+  context_to_corpus:
+    permission:
+    - action: propose
+      assignee: agent
+    prohibition: []
+    duty: []
+  corpus_to_context:
+    permission:
+    - action: read
+      assignee: agent
+    prohibition: []
+    duty: []

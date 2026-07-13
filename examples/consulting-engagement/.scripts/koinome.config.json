@@ -43,14 +43,21 @@
       "log",
       "source",
       "entity",
-      "concept"
+      "concept",
+      "decision",
+      "claim",
+      "state",
+      "policy",
+      "instruction"
     ],
     "status": [
       "active",
       "in-review",
       "done",
       "superseded",
-      "archived"
+      "archived",
+      "accepted",
+      "proposed"
     ]
   },
   "min_summary_len": 40,
@@ -67,5 +74,13 @@
     "90-templates",
     "99-archive"
   ],
-  "template_version": "0.0.0"
+  "template_version": "0.0.0",
+  "v0_record_types": [
+    "decision",
+    "claim",
+    "state",
+    "policy",
+    "instruction",
+    "source"
+  ]
 }

@@ -40,7 +40,7 @@ def _format_phase_failure(phase: str, out: str, err: str) -> str:
     return f"{phase} failed (non-zero exit; no output captured)"
 
 
-def check_conformance(dest, *, manifest=False, git=False):
+def check_conformance(dest, *, manifest=False, corpus_identity=False, git=False):
     """Read-only conformance check: validation and MOC freshness only.
 
     Returns (exit_code, message). Never mutates the corpus.
@@ -51,6 +51,8 @@ def check_conformance(dest, *, manifest=False, git=False):
         cmd = [_PYTHON, str(checker)]
         if manifest:
             cmd.append("--manifest")
+        if corpus_identity:
+            cmd.append("--corpus-identity")
         if git:
             cmd.append("--git")
         rc, out, err = _run(cmd, cwd=dest)

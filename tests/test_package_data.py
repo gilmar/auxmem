@@ -19,6 +19,8 @@ REQUIRED_WHEEL_PREFIXES = (
     "koinome/template/bootstrap.sh",
     "koinome/template/.scripts/validate_corpus.py",
     "koinome/template/.scripts/check_corpus.py",
+    "koinome/template/.scripts/schema_validate.py",
+    "koinome/template/.schemas/v0/corpus-identity.schema.json",
     "koinome/template/.scripts/koinome.config.json",
     "koinome/template/.scripts/gen_mocs.py",
     "koinome/template/.scripts/pre-commit",
@@ -70,6 +72,7 @@ def test_wheel_includes_dot_directories(built_wheel):
         "koinome/template/.scripts/",
         "koinome/template/.skills/",
         "koinome/template/.github/",
+        "koinome/template/.schemas/",
     )
     for prefix in dot_prefixes:
         assert any(m.startswith(prefix) for m in members), f"wheel missing files under {prefix}"

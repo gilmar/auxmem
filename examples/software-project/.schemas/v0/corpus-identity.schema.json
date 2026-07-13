@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koinome.dev/schemas/v0/corpus-identity.schema.json",
+  "title": "Koinome corpus identity manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format_version",
+    "corpus_id",
+    "created_at",
+    "owner",
+    "steward",
+    "boundary_policies"
+  ],
+  "properties": {
+    "format_version": { "const": "0" },
+    "corpus_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owner": { "$ref": "#/$defs/agent" },
+    "steward": { "$ref": "#/$defs/agent" },
+    "boundary_policies": { "$ref": "#/$defs/boundary_policies" }
+  },
+  "$defs": {
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string" }
+      }
+    },
+    "odrl_rule": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "action": { "type": "string" },
+        "assignee": { "type": "string" },
+        "target": { "type": "string" }
+      }
+    },
+    "odrl_offer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "permission": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/odrl_rule" }
+        },
+        "prohibition": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/odrl_rule" }
+        },
+        "duty": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/odrl_rule" }
+        }
+      }
+    },
+    "boundary_policies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["context_to_corpus", "corpus_to_context"],
+      "properties": {
+        "context_to_corpus": { "$ref": "#/$defs/odrl_offer" },
+        "corpus_to_context": { "$ref": "#/$defs/odrl_offer" }
+      }
+    }
+  }
+}

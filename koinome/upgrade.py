@@ -25,6 +25,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from .corpus_identity import ensure_identity_manifest
+from .corpus_migrate import migrate_record_types, write_migration_report
 from .exit_codes import NON_CONFORMANT, OK, OPERATION_FAILED
 from .manifest import verify_bundled_template
 from .paths import config_path, managed_path, resolve_corpus
@@ -446,7 +448,7 @@ def _predict_post_check(dest: Path, plan: UpgradePlan) -> PostCheckResult:
         return _run_post_checks(workspace)
 
 
-def upgrade(dest, force=False, dry_run=False):
+def upgrade(dest, force=False, dry_run=False, migrate_record_types_flag=False):
     try:
         verify_bundled_template(TEMPLATE_DIR, MANIFEST_SRC)
     except ValueError as exc:
@@ -463,8 +465,36 @@ def upgrade(dest, force=False, dry_run=False):
         raise UpgradeError(str(e)) from e
 
     plan = build_plan(dest, force=force)
-    if plan.status == "up-to-date":
+    if plan.status == "up-to-date" and not migrate_record_types_flag:
+        ensure_identity_manifest(dest)
         return {"status": "up-to-date", "version": plan.new_version, "changes": []}
+
+    if plan.status == "up-to-date" and migrate_record_types_flag:
+        if dry_run:
+            mig = migrate_record_types(dest, dry_run=True)
+            return {
+                "status": "dry-run",
+                "from": plan.old_version,
+                "to": plan.new_version,
+                "changes": [f"would migrate {len(mig.changed)} note(s)"],
+                "conflicts": [],
+                "deprecated": [],
+                "created_folders": [],
+                "post_exit_code": OK,
+                "post_phase": None,
+                "post_detail": "",
+            }
+        mig = migrate_record_types(dest, dry_run=False)
+        write_migration_report(dest, mig)
+        ensure_identity_manifest(dest)
+        return {
+            "status": "migrated",
+            "from": plan.old_version,
+            "to": plan.new_version,
+            "changes": [f"migrated {len(mig.changed)} note(s) to v0 record types"],
+            "conflicts": [],
+            "post_exit_code": OK,
+        }
 
     if dry_run:
         plan.post_check = _predict_post_check(dest, plan)
@@ -489,6 +519,11 @@ def upgrade(dest, force=False, dry_run=False):
             return plan.to_result(backup=str(backup_dir))
 
         _finalize_state(dest, ts)
+        ensure_identity_manifest(dest)
+        if migrate_record_types_flag:
+            mig = migrate_record_types(dest, dry_run=False)
+            write_migration_report(dest, mig)
+            plan.changes.append(f"migrated {len(mig.changed)} note(s) to v0 record types")
         _write_report(
             dest,
             plan.old_version,
