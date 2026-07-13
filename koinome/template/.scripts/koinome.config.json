@@ -27,6 +27,11 @@
   ],
   "vocab": {
     "type": [
+      "decision",
+      "claim",
+      "state",
+      "policy",
+      "instruction",
       "project-doc",
       "governance-finding",
       "quality-log",
@@ -47,9 +52,19 @@
       "in-review",
       "done",
       "superseded",
-      "archived"
+      "archived",
+      "accepted",
+      "proposed"
     ]
   },
+  "v0_record_types": [
+    "decision",
+    "claim",
+    "state",
+    "policy",
+    "instruction",
+    "source"
+  ],
   "min_summary_len": 40,
   "skip_dirs": [
     ".git",

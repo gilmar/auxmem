@@ -4,11 +4,43 @@
   "files": {
     ".github/workflows/koinome-check.yml": {
       "policy": "overwrite",
-      "sha256": "dd48998e79602187d84950272ae2f9350cf77d760cc1636e06c69dd9cebab26f"
+      "sha256": "a97d14f9e3e4c6c54bc61aec7bdf73e7b6d608c0875ad87e7fe570ff1781de9e"
+    },
+    ".schemas/v0/corpus-identity.schema.json": {
+      "policy": "overwrite",
+      "sha256": "6590cbbbc29ccc7f2c45d3a54bbfeada157bd8dcc034b5b5a84a1cef26fc92f3"
+    },
+    ".schemas/v0/record-claim.schema.json": {
+      "policy": "overwrite",
+      "sha256": "f97a3cf8a815cc4a52630e8477697274da94c98b3e26e935144b454f88bacb80"
+    },
+    ".schemas/v0/record-common.schema.json": {
+      "policy": "overwrite",
+      "sha256": "747d8cf6903d879a81f180fbf8acf3e27c9fdaedd54a046a1171ee218fa0728d"
+    },
+    ".schemas/v0/record-decision.schema.json": {
+      "policy": "overwrite",
+      "sha256": "f44a1d4d90fe40ff654242bf52e9360a67d96284ca5d21930832aad8b72cf7df"
+    },
+    ".schemas/v0/record-instruction.schema.json": {
+      "policy": "overwrite",
+      "sha256": "2408d5423383c28e2fbdcc09ac7905433974523272638a5f97646c9c8ff96fa2"
+    },
+    ".schemas/v0/record-policy.schema.json": {
+      "policy": "overwrite",
+      "sha256": "61e91a7f2344d5b1c2d42ba9f14589525d761e2b01714aa7dce9a0171fdae620"
+    },
+    ".schemas/v0/record-source.schema.json": {
+      "policy": "overwrite",
+      "sha256": "c2f2d7bfc7e41ce0500727628c847084b1015eda16425287a709f8ee57909403"
+    },
+    ".schemas/v0/record-state.schema.json": {
+      "policy": "overwrite",
+      "sha256": "b6e8f1f6ffaf28f0a5a7d3d0074c88b36ec6210037501935171c9540e5af6069"
     },
     ".scripts/check_corpus.py": {
       "policy": "overwrite",
-      "sha256": "8611e19e6144a395bf36b3dd93686a18ba47c5db26f7bce051ca6a77c79d49da"
+      "sha256": "85aa0eb85af4ca4e55fd7b03577dbe43a0928903c67c6c20366a5225a540a2d8"
     },
     ".scripts/check_staged_snapshot.py": {
       "policy": "overwrite",
@@ -32,7 +64,7 @@
     },
     ".scripts/koinome.config.json": {
       "policy": "merge",
-      "sha256": "9f2e3050651e4939f998064b6950805834e02278b955f0a15491d32e4bee0b0e"
+      "sha256": "97097a5e047a464a75a8cfed2a1ab63979a197afa7f9c1a02b2d501e6b49e55e"
     },
     ".scripts/koinome_sync.py": {
       "policy": "overwrite",
@@ -42,13 +74,17 @@
       "policy": "overwrite",
       "sha256": "2067534b6da72b2bce71c8f4cbfd8787c517131ebcd8763f955313614decc41f"
     },
+    ".scripts/schema_validate.py": {
+      "policy": "overwrite",
+      "sha256": "5ba311c59fe2ff369353ce0d62b4f4d328c099f2445aa3e8926ba21b0c1bbc80"
+    },
     ".scripts/synthesis_status.py": {
       "policy": "overwrite",
       "sha256": "0c3a36ab7470d05aa5826bec4a16d036f02cca6f02878a48ab472d3ed41cd3d9"
     },
     ".scripts/validate_corpus.py": {
       "policy": "overwrite",
-      "sha256": "6d2ab9a4354d95c7eab0473a3a13c2fcd86228c160d89374c4226fd51ad10dfe"
+      "sha256": "819a6b495a7bf19a5961a5b386530e8acb7b8dcf0c1518776d5d76b9dcc80470"
     },
     ".skills/koinome-adr/SKILL.md": {
       "policy": "merge3",
@@ -98,9 +134,17 @@
       "policy": "merge3",
       "sha256": "ea359916e07c34884844c02ab0e3a91326825b382885fcfa1005f116d7ff952c"
     },
+    "90-templates/claim.md": {
+      "policy": "merge3",
+      "sha256": "1f6a962dc9de6182e737d36ba50314cb297f867dfd846906addf1edbd72f5223"
+    },
     "90-templates/concept.md": {
       "policy": "merge3",
       "sha256": "e216eff81de9e0589504583237b4b47ed57414266f33a6a1d7cc55eb167cbdef"
+    },
+    "90-templates/decision.md": {
+      "policy": "merge3",
+      "sha256": "76b81f51c34e262fd8daf997bf718211a6afe605d7abefac043db2c19b47f55d"
     },
     "90-templates/entity.md": {
       "policy": "merge3",
@@ -110,9 +154,17 @@
       "policy": "merge3",
       "sha256": "4ba2d839f26caed150ed90c6d52bc2e580aabef81e15687d866d4f7947856dc6"
     },
+    "90-templates/instruction.md": {
+      "policy": "merge3",
+      "sha256": "7672dcf061f47864ad143ca13f89dcbe1c3c671b597a34babcb89604ad00e06c"
+    },
     "90-templates/meeting.md": {
       "policy": "merge3",
       "sha256": "f07de12fdeb3f77ffe2da6fa3f7f400049ed1fd00066fb7cf12525115a3a2090"
+    },
+    "90-templates/policy.md": {
+      "policy": "merge3",
+      "sha256": "3b41a7e1ec20e99f09c70e6d4ba21b3ca1197138637bff9efd3031fc2b681be1"
     },
     "90-templates/project-doc.md": {
       "policy": "merge3",
@@ -125,6 +177,10 @@
     "90-templates/stakeholder.md": {
       "policy": "merge3",
       "sha256": "b4dfb478f3682d4eb38dfb90c38a8889c6a3dfda9a0f853bb4f59f9c8b6a469f"
+    },
+    "90-templates/state.md": {
+      "policy": "merge3",
+      "sha256": "db6a51eb9ac691e9d735aab465c100ea7869a5138104cd0182e2bb82ab3a6ac1"
     },
     "90-templates/weekly-review.md": {
       "policy": "merge3",

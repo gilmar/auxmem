@@ -5,7 +5,7 @@ description = "Koinome CLI: local-first, governed knowledge corpora for humans a
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.10"
-dependencies = ["pyyaml>=6.0"]
+dependencies = ["pyyaml>=6.0", "jsonschema>=4.21"]
 
 [project.urls]
 Homepage = "https://github.com/gilmar/koinome"
@@ -25,7 +25,9 @@ packages = ["koinome"]
 
 [tool.setuptools.package-data]
 koinome = [
+  "schemas/**",
   "template/**",
+  "template/.schemas/**",
   "template/.koinome-manifest.json",
   "template/.gitignore",
   "template/.gitattributes",

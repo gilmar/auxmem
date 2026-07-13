@@ -16,8 +16,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install validator dependency
-        run: pip install pyyaml
+      - name: Install validator dependencies
+        run: pip install pyyaml jsonschema
 
       - name: Koinome conformance check
         run: python3 .scripts/check_corpus.py

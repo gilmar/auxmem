@@ -14,6 +14,8 @@ def policy_for(rel: str) -> str | None:
         return "merge"
     if rel.startswith(".github/workflows/") and rel.endswith((".yml", ".yaml")):
         return "overwrite"
+    if rel.startswith(".schemas/"):
+        return "overwrite"
     if rel.startswith(".scripts/") or rel == "bootstrap.sh":
         return "overwrite"
     if rel.startswith(".skills/"):

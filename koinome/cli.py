@@ -43,13 +43,23 @@ where to run commands
 
 def cmd_upgrade(args):
     try:
-        result = upgrade_mod.upgrade(args.dest, force=args.force, dry_run=args.dry_run)
+        result = upgrade_mod.upgrade(
+            args.dest,
+            force=args.force,
+            dry_run=args.dry_run,
+            migrate_record_types_flag=args.migrate_record_types,
+        )
     except upgrade_mod.UpgradeError as e:
         print(f"error: {e}", file=sys.stderr)
         return 1
     if result["status"] == "up-to-date":
         print(f"already at template version {result['version']}. Use --force to re-apply.")
         return 0
+    if result["status"] == "migrated":
+        print("record type migration complete.")
+        for c in result["changes"]:
+            print(f"  {c}")
+        return OK
     if result["status"] == "dry-run":
         print(f"dry-run: {result['from']} -> {result['to']}")
         if result.get("deprecated"):
@@ -151,7 +161,10 @@ def cmd_doctor(args):
 def cmd_check(args):
     try:
         exit_code, message = importers.check_conformance(
-            args.dest, manifest=args.manifest, git=args.git
+            args.dest,
+            manifest=args.manifest,
+            corpus_identity=args.corpus_identity,
+            git=args.git,
         )
     except importers.ImportError_ as e:
         print(f"error: {e}", file=sys.stderr)
@@ -242,6 +255,11 @@ def build_parser():
         action="store_true",
         help="also require a clean git working tree",
     )
+    c.add_argument(
+        "--corpus-identity",
+        action="store_true",
+        help="also validate koinome.corpus.yaml (corpus identity manifest)",
+    )
     c.set_defaults(func=cmd_check)
 
     u = sub.add_parser(
@@ -258,6 +276,11 @@ def build_parser():
         "--dry-run",
         action="store_true",
         help="report planned changes without modifying the corpus",
+    )
+    u.add_argument(
+        "--migrate-record-types",
+        action="store_true",
+        help="rewrite legacy note types (e.g. adr) to v0 record types; writes a report in 00-inbox/",
     )
     u.set_defaults(func=cmd_upgrade)
 

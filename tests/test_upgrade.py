@@ -182,7 +182,7 @@ def test_merge3_conflict_marks_file_and_exits_nonzero(tmp_path, monkeypatch):
 
 
 def test_cli_exits_nonconformant_when_conflicts_remain(tmp_corpus, monkeypatch):
-    def fake_upgrade(dest, force=False, dry_run=False):
+    def fake_upgrade(dest, force=False, dry_run=False, migrate_record_types_flag=False):
         return {
             "status": "upgraded",
             "from": "0.0.0",

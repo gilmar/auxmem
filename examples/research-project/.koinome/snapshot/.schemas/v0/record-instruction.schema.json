@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koinome.dev/schemas/v0/record-instruction.schema.json",
+  "allOf": [
+    { "$ref": "record-common.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "type": { "const": "instruction" }
+      },
+      "required": ["type"]
+    }
+  ]
+}
