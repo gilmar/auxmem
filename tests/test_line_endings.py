@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from koinome.line_endings import ensure_lf_bytes, normalize_corpus_shell_scripts
+from koinome.line_endings import normalize_corpus_shell_scripts
 from koinome.scaffold import ScaffoldError, scaffold
 from tests.helpers import REPO_ROOT, run_koinome, scaffold_corpus
 from tests.test_bootstrap import run_bootstrap
