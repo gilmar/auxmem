@@ -9,6 +9,7 @@ import sys
 
 import pytest
 
+from koinome.bash_path import resolve_bash
 from tests.helpers import REPO_ROOT, scaffold_corpus, validate_corpus
 
 TEMPLATE_BOOTSTRAP = REPO_ROOT / "koinome" / "template" / "bootstrap.sh"
@@ -16,7 +17,7 @@ TEMPLATE_BOOTSTRAP = REPO_ROOT / "koinome" / "template" / "bootstrap.sh"
 
 def run_bootstrap(dest, *extra_args: str, env: dict[str, str] | None = None) -> subprocess.CompletedProcess:
     return subprocess.run(
-        ["bash", "bootstrap.sh", *extra_args],
+        [resolve_bash(), "bootstrap.sh", *extra_args],
         cwd=dest,
         env=env,
         capture_output=True,
@@ -44,12 +45,14 @@ def test_bootstrap_does_not_auto_install_packages():
 
 
 def test_bootstrap_fails_without_pyyaml(tmp_path):
+    if os.name == "nt":
+        pytest.skip("venv PATH layout differs on Windows; covered on Unix CI")
     venv = tmp_path / "nopyyaml"
     subprocess.run([sys.executable, "-m", "venv", str(venv)], check=True)
     dest = tmp_path / "corpus"
     scaffold_corpus(dest, no_bootstrap=True)
     env = os.environ.copy()
-    env["PATH"] = f"{venv / 'bin'}:{env['PATH']}"
+    env["PATH"] = f"{venv / 'bin'}{os.pathsep}{env['PATH']}"
     result = run_bootstrap(dest, env=env)
     assert result.returncode != 0
     combined = result.stdout + result.stderr

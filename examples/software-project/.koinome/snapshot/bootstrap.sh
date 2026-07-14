@@ -160,7 +160,8 @@ link_skills .gemini/skills
 link_skills .cursor/skills
 
 echo "== 5. pre-commit hook =="
-cp .scripts/pre-commit .git/hooks/pre-commit
+# Strip CR so Git for Windows autocrlf never leaves a broken hook (issue #36).
+sed 's/\r$//' .scripts/pre-commit > .git/hooks/pre-commit
 chmod +x .git/hooks/pre-commit
 echo "  installed (re-run ./bootstrap.sh after koinome upgrade to refresh the hook)"
 

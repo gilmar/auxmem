@@ -38,3 +38,56 @@ jobs:
 
       - name: Run repository checks
         run: bash scripts/check_repo.sh
+
+  # Focused Windows coverage for issue #36 (CRLF / Git Bash bootstrap).
+  # Full check_repo.sh stays on Unix. Use Git Bash explicitly — bare `bash` on
+  # windows-latest can resolve to the WSL shim with no distros installed.
+  windows-bootstrap:
+    name: windows-bootstrap
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: "C:/Program Files/Git/bin/bash.exe" -eo pipefail {0}
+    steps:
+      - name: Configure Git autocrlf (reproduce Windows default)
+        shell: powershell
+        run: git config --global core.autocrlf true
+
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Prefer Git Bash over WSL for subprocesses
+        run: |
+          echo "KOINOME_BASH=C:/Program Files/Git/bin/bash.exe" >> "$GITHUB_ENV"
+          echo "BASH=C:/Program Files/Git/bin/bash.exe" >> "$GITHUB_ENV"
+
+      - name: Verify checkout kept shell scripts LF via .gitattributes
+        run: |
+          set -euo pipefail
+          offenders=()
+          for f in koinome/template/bootstrap.sh \
+                   koinome/template/.scripts/koinome-sync.sh \
+                   koinome/template/.scripts/pre-commit \
+                   scripts/*.sh; do
+            if grep -U $'\r' "$f" >/dev/null 2>&1; then
+              offenders+=("$f")
+            fi
+          done
+          if [ "${#offenders[@]}" -gt 0 ]; then
+            echo "CRLF after checkout with autocrlf=true (gitattributes failed):"
+            printf '  %s\n' "${offenders[@]}"
+            exit 1
+          fi
+          echo "ok: template/scripts shell files are LF after Windows checkout"
+
+      - name: Windows Git Bash smoke
+        run: bash scripts/windows_ci_smoke.sh

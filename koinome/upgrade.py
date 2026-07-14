@@ -28,6 +28,7 @@ from typing import Any
 from .corpus_identity import ensure_identity_manifest
 from .corpus_migrate import migrate_record_types, write_migration_report
 from .exit_codes import NON_CONFORMANT, OK, OPERATION_FAILED
+from .line_endings import normalize_corpus_shell_scripts, normalize_script_file
 from .manifest import verify_bundled_template
 from .paths import config_path, managed_path, resolve_corpus
 from .version import TEMPLATE_VERSION
@@ -236,6 +237,7 @@ def _apply_overwrite(
         report.append(f"added: {rel}")
     cur_file.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(new_file, cur_file)
+    normalize_script_file(cur_file)
     _chmod_managed(cur_file)
 
 
@@ -467,7 +469,11 @@ def upgrade(dest, force=False, dry_run=False, migrate_record_types_flag=False):
     plan = build_plan(dest, force=force)
     if plan.status == "up-to-date" and not migrate_record_types_flag:
         ensure_identity_manifest(dest)
-        return {"status": "up-to-date", "version": plan.new_version, "changes": []}
+        fixed = normalize_corpus_shell_scripts(dest)
+        result = {"status": "up-to-date", "version": plan.new_version, "changes": []}
+        if fixed:
+            result["changes"] = [f"normalized LF line endings: {', '.join(fixed)}"]
+        return result
 
     if plan.status == "up-to-date" and migrate_record_types_flag:
         if dry_run:
@@ -487,6 +493,7 @@ def upgrade(dest, force=False, dry_run=False, migrate_record_types_flag=False):
         mig = migrate_record_types(dest, dry_run=False)
         write_migration_report(dest, mig)
         ensure_identity_manifest(dest)
+        normalize_corpus_shell_scripts(dest)
         return {
             "status": "migrated",
             "from": plan.old_version,
@@ -520,6 +527,9 @@ def upgrade(dest, force=False, dry_run=False, migrate_record_types_flag=False):
 
         _finalize_state(dest, ts)
         ensure_identity_manifest(dest)
+        fixed = normalize_corpus_shell_scripts(dest)
+        if fixed:
+            plan.changes.append(f"normalized LF line endings: {', '.join(fixed)}")
         if migrate_record_types_flag:
             mig = migrate_record_types(dest, dry_run=False)
             write_migration_report(dest, mig)

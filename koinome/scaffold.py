@@ -10,7 +10,9 @@ import subprocess
 from datetime import date
 from pathlib import Path
 
+from .bash_path import resolve_bash
 from .corpus_identity import write_identity_manifest
+from .line_endings import normalize_corpus_shell_scripts
 from .version import TEMPLATE_VERSION
 
 _PKG_ROOT = Path(__file__).resolve().parent
@@ -89,6 +91,8 @@ def scaffold(name, dest, domains, run_bootstrap=True, stream_bootstrap=False):
 
     # copy template tree (dotfiles included)
     shutil.copytree(TEMPLATE_DIR, dest, dirs_exist_ok=True)
+    # Git for Windows / some installs ship CRLF; bash then fails on pipefail/$'\r'.
+    normalize_corpus_shell_scripts(dest)
 
     # write config from inputs
     base = (TEMPLATE_DIR / ".scripts" / "koinome.config.json").read_text(encoding="utf-8")
@@ -124,13 +128,14 @@ def scaffold(name, dest, domains, run_bootstrap=True, stream_bootstrap=False):
 
     result = {"dest": dest, "domains": domains, "bootstrapped": False}
     if run_bootstrap:
+        bash = resolve_bash()
         kwargs = {"cwd": dest, "text": True}
         if stream_bootstrap:
-            proc = subprocess.run(["bash", "bootstrap.sh"], **kwargs)
+            proc = subprocess.run([bash, "bootstrap.sh"], **kwargs)
             result["bootstrap_stdout"] = ""
             result["bootstrap_stderr"] = ""
         else:
-            proc = subprocess.run(["bash", "bootstrap.sh"], capture_output=True, **kwargs)
+            proc = subprocess.run([bash, "bootstrap.sh"], capture_output=True, **kwargs)
             result["bootstrap_stdout"] = proc.stdout
             result["bootstrap_stderr"] = proc.stderr
         result["bootstrapped"] = proc.returncode == 0
