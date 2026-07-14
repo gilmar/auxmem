@@ -2,7 +2,9 @@
 # turns LF into CRLF and breaks `set -o pipefail` / blank lines as $'\r').
 *.sh text eol=lf
 bootstrap.sh text eol=lf
+pre-commit text eol=lf
 .scripts/pre-commit text eol=lf
+.git/hooks/pre-commit text eol=lf
 
 # append-only files never conflict across devices
 71-log/*.md merge=union

@@ -8,7 +8,7 @@ import pytest
 
 from koinome.line_endings import ensure_lf_bytes, normalize_corpus_shell_scripts
 from koinome.scaffold import ScaffoldError, scaffold
-from tests.helpers import REPO_ROOT, scaffold_corpus
+from tests.helpers import REPO_ROOT, run_koinome, scaffold_corpus
 from tests.test_bootstrap import run_bootstrap
 
 TEMPLATE_BOOTSTRAP = REPO_ROOT / "koinome" / "template" / "bootstrap.sh"
@@ -31,16 +31,66 @@ def test_repo_gitattributes_forces_lf_for_shell():
     assert "*.sh text eol=lf" in text
 
 
-def test_normalize_corpus_shell_scripts_rewrites_crlf(tmp_path):
+def test_normalizes_all_template_shell_scripts(tmp_path):
     dest = tmp_path / "corpus"
     scaffold_corpus(dest, no_bootstrap=True)
-    path = dest / "bootstrap.sh"
-    path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
-    assert b"\r\n" in path.read_bytes()
+    targets = [
+        dest / "bootstrap.sh",
+        dest / ".scripts" / "koinome-sync.sh",
+        dest / ".scripts" / "pre-commit",
+    ]
+    for path in targets:
+        path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
+        assert b"\r\n" in path.read_bytes()
     changed = normalize_corpus_shell_scripts(dest)
-    assert "bootstrap.sh" in changed
-    assert b"\r" not in path.read_bytes()
-    assert ensure_lf_bytes(b"a\r\nb\rc\n") == b"a\nb\nc\n"
+    assert set(changed) >= {"bootstrap.sh", ".scripts/koinome-sync.sh", ".scripts/pre-commit"}
+    for path in targets:
+        assert b"\r" not in path.read_bytes()
+
+
+def test_normalizes_installed_git_hook(tmp_path):
+    dest = tmp_path / "corpus"
+    scaffold_corpus(dest)
+    hook = dest / ".git" / "hooks" / "pre-commit"
+    assert hook.is_file()
+    hook.write_bytes(hook.read_bytes().replace(b"\n", b"\r\n"))
+    changed = normalize_corpus_shell_scripts(dest)
+    assert ".git/hooks/pre-commit" in changed
+    assert b"\r" not in hook.read_bytes()
+
+
+def test_upgrade_up_to_date_still_normalizes_shell_scripts(tmp_path):
+    dest = tmp_path / "corpus"
+    scaffold_corpus(dest)
+    sync = dest / ".scripts" / "koinome-sync.sh"
+    sync.write_bytes(sync.read_bytes().replace(b"\n", b"\r\n"))
+    result = run_koinome(["upgrade", str(dest)])
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert b"\r" not in sync.read_bytes()
+    assert "normalized LF" in result.stdout or "already at template" in result.stdout
+
+
+def test_bootstrap_installs_hook_without_cr(tmp_path):
+    dest = tmp_path / "corpus"
+    scaffold_corpus(dest, no_bootstrap=True)
+    pre = dest / ".scripts" / "pre-commit"
+    pre.write_bytes(pre.read_bytes().replace(b"\n", b"\r\n"))
+    # Source stays CRLF; bootstrap must strip when installing the hook.
+    result = run_bootstrap(dest)
+    assert result.returncode == 0, result.stdout + result.stderr
+    hook = dest / ".git" / "hooks" / "pre-commit"
+    assert hook.is_file()
+    assert b"\r" not in hook.read_bytes()
+
+
+def test_template_shell_scripts_are_lf_only():
+    root = REPO_ROOT / "koinome" / "template"
+    offenders = []
+    for path in [root / "bootstrap.sh", *sorted((root / ".scripts").glob("*.sh")), root / ".scripts" / "pre-commit"]:
+        if b"\r" in path.read_bytes():
+            offenders.append(str(path.relative_to(REPO_ROOT)))
+    assert not offenders, f"CRLF in template scripts: {offenders}"
+
 
 
 def test_normalized_crlf_bootstrap_runs(tmp_path):

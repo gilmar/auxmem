@@ -4,7 +4,7 @@
   "files": {
     ".gitattributes": {
       "policy": "merge3",
-      "sha256": "d7314851d56c942f483da8fa3c2705c4a3626204ea5b82bd564f83ca05596a8d"
+      "sha256": "852487b97d069df1684d043e5d8cb605ae38d0c7d85f9cfa12159e48be9a82eb"
     },
     ".github/workflows/koinome-check.yml": {
       "policy": "overwrite",
@@ -208,7 +208,7 @@
     },
     "bootstrap.sh": {
       "policy": "overwrite",
-      "sha256": "8dbdd19f0548680e1de6775d287c00e16d95c6a947ee2e8ccb8a244d2a31e14e"
+      "sha256": "57db87a7cdc02bf8fa9a7b282ccf68b6e4bee069484060658240d3756680bc92"
     },
     "docs/ARCHITECTURE.md": {
       "policy": "merge3",

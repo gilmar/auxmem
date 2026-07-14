@@ -54,6 +54,8 @@ def cmd_upgrade(args):
         return 1
     if result["status"] == "up-to-date":
         print(f"already at template version {result['version']}. Use --force to re-apply.")
+        for c in result.get("changes") or []:
+            print(f"  {c}")
         return 0
     if result["status"] == "migrated":
         print("record type migration complete.")
