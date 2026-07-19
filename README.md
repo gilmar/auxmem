@@ -1,99 +1,82 @@
-<p align="center">
-  <img src="docs/images/koinome-readme-banner.png" alt="Koinome — Knowledge in common. Governed corpora for humans and AI agents." width="100%">
-</p>
+![Koinome. Knowledge in common. Governed corpora for humans and AI agents.](docs/images/koinome-readme-banner.png)
 
-Your AI agents forget everything. Koinome gives them — and you — a durable, governed memory made of plain Markdown files you own.
+> **Knowledge in common.** A corpus of plain files you own. Agents help write it. A deterministic gate decides what gets in. You have final say. Forever portable.
 
-The unit is the **corpus**: a portable body of knowledge that lives as plain files on disk. The `koinome` CLI creates a corpus, keeps it healthy behind a deterministic validation gate, and equips any AI agent — Claude Code, Codex, Gemini CLI, Cursor — to read and maintain it, while you keep final say over every change. No accounts, no telemetry, no server.
+---
 
-## Why Koinome
+## The problem
 
-AI agents are amnesiac. Every session starts from zero, so context, decisions, and durable facts evaporate between sessions, and you re-explain the same project, the same constraints, the same decisions, every time.
+Monday, you explain your project to Claude Code: the architecture decision from March, the constraint that never made it into the code, the approach you already tried and abandoned. Tuesday, you open Cursor and explain it all again.
 
-The memory products built to fix this share one shape: knowledge persists silently, in a provider's store, under a provider's account. You can't open it in an editor, diff it, or take it with you. And memory corruption compounds quietly — for work knowledge, decisions, and governance records, the rule is absolute: nothing rewrites authoritative knowledge while you sleep.
+The memory features built to fix this all share one shape. Knowledge persists silently, in a provider's store, under a provider's account. You cannot open it in an editor, diff it, or take it with you. And when a remembered "fact" is stale or wrong, nothing can tell you where it came from. For decisions, work knowledge, and anything authoritative, that shape fails one absolute rule: **nothing should rewrite your knowledge while you sleep.**
 
-## How it works
+## What Koinome is
 
-The files are the product. Three commitments follow:
+Your knowledge lives in a **corpus**: a folder of plain Markdown and YAML on your own disk, versioned with git, readable by any editor and any agent. The `koinome` CLI keeps it healthy behind a deterministic validation gate. AI agents (Claude Code, Codex, Gemini CLI, Cursor) read it, help maintain it, and propose to it. They never control it.
 
-1. **Open standards only.** CommonMark, YAML frontmatter, git, and todo.txt. Any human or agent can read a corpus with no adapter.
-2. **Governed, not free-form.** Deterministic validation and an optional git hook enforce the corpus contract. AI assists around the gate, never inside it.
-3. **Authored, not compiled.** Derived synthesis pages cite sources and pass the same gate as authored notes.
+No accounts. No server. No telemetry.
 
-Judge any memory system with the turn-it-off test: delete the tooling. With Koinome, delete every script and the corpus still works — notes open in any editor, git still diffs them, grep still finds them.
-
-## Quick start
-
-```bash
-# run in place, no install
-./koinome-cli new
-
-# or install the command
-pipx install .        # or: uv tool install .
-koinome new           # or: koinome init (same scaffold today)
-```
-
-Interactive, or fully scriptable:
+## What using it looks like
 
 ```bash
 koinome new --name my-work --path ~/my-work
 ```
 
-Or pass domains when the layout is already known:
+Open the corpus in your agent and run the `koinome-init` skill. From then on, the loop:
+
+1. **The agent reads before acting.** The March decision, the constraint, the dead end: already in context. The re-explaining stops.
+2. **The agent drafts into the corpus.** A note, a decision record, a synthesis page distilled from your chat exports.
+3. **The gate decides.** `koinome doctor` and the git hook reject what breaks the contract: synthesis without cited sources, broken references, malformed records. The check is deterministic. No model, no network, nothing to hallucinate.
+4. **You review the diff and commit.** Nothing becomes part of your corpus unattended.
+5. **Delete Koinome tomorrow and nothing is lost.** Every note still opens in any editor, still diffs in git, still greps like anything else.
+
+Step five is the **turn-it-off test**, and it is how to judge any memory system: delete the tooling and see what your knowledge is still worth. Koinome is built to pass it on purpose. The files are the product.
+
+## Why this is not just a folder of Markdown
+
+A folder of Markdown plus git already beats most memory products, and if that works for you, keep it. Koinome earns its difference at the boundary.
+
+Every AI memory system on the market is single-principal by architecture: one owner, one boundary, one authority. Nobody's knowledge actually works that way. I keep three corpora: personal, academic, and work. One person operates all three, but three different principals stand behind them, and what may move from the work corpus into the personal one is not what may move back. Today's memory products cannot even represent that question. I have lived the worst version of it: across a long career, every time I left an employer I destroyed everything I had written there, the legitimate lessons along with the confidential material, because nothing could tell them apart.
+
+Koinome's thesis is that knowledge should move between people, teams, and organisations through explicit, governed operations (share, contribute, merge, split, federate), carrying provenance and policy, never as silent copies. **Sharing is the point.** The individual product in this repository is its foundation, because you cannot govern movement between corpora until the corpus exists as a unit.
+
+Cross-corpus operations are design scope, developed through public RFCs. They are **not** shipped software, and this project never blurs the two. The full argument, roadmap, and binding commitments: **[docs/STRATEGY.md](docs/STRATEGY.md)**.
+
+## Quick start
 
 ```bash
-koinome new --name my-work --path ~/my-work \
-  --domain 10-projects=projects \
-  --domain 20-governance=governance
+pipx install .        # or: uv tool install .   or run ./koinome-cli in place
+koinome new           # interactive; add --name and --path to script it
 ```
 
-This creates the corpus, installs the git hook, and sets up shared folders. Point your agent at it and run the `koinome-init` skill to finish setup. Requires Python 3.10+ and PyYAML.
-
-## The full workflow
-
-1. **Install** — `uv tool install .` or run `./koinome-cli`.
-2. **Create a corpus** — `koinome new` or `koinome init` with `--name` and `--path`.
-3. **Connect an agent** — open the corpus in Claude Code, Codex, Gemini CLI, or Cursor; run `koinome-init`.
-4. **Author or import** — add notes, import exports with `koinome seed`, or distill seeds with `koinome-distill-seeds`.
-5. **Validate** — `koinome doctor ~/my-corpus` or `python3 .scripts/validate_corpus.py --all` inside the corpus.
-6. **Retrieve and synthesise** — use MOCs, grep, and `koinome-synthesize` for provenance-backed synthesis.
-7. **Synchronise** — commit and push with git; optional `koinome_sync.py` for automated sync.
-8. **Upgrade safely** — `koinome upgrade ~/my-corpus` refreshes managed tooling without touching your notes.
-9. **Recover** — roll back from `.koinome/backups/` or git history; validation failures block bad commits.
-10. **Remove tooling** — delete Koinome scripts; your Markdown and git history remain.
+Requires Python 3.10+ and PyYAML. Then open the corpus in your agent and run `koinome-init`. Full walkthrough, import from provider exports, sync, and recovery: **[docs/USAGE.md](docs/USAGE.md)**.
 
 ## Commands
 
-| command | what it does |
-| --- | --- |
-| `koinome new` | Create a new corpus |
-| `koinome init` | Same as `new` today (richer semantics planned) |
-| `koinome seed` | Normalise a provider export to an import staging area |
-| `koinome doctor CORPUS` | Validate a corpus and refresh navigation maps |
-| `koinome check CORPUS` | Read-only conformance check (CI-safe) |
-| `koinome upgrade CORPUS` | Upgrade Koinome-managed tooling without modifying user-authored knowledge |
-
-See [docs/USAGE.md](docs/USAGE.md) for the full reference.
+| command                  | what it does                                                       |
+| ------------------------ | ------------------------------------------------------------------ |
+| `koinome new`            | Create a corpus                                                    |
+| `koinome seed`           | Normalise a provider export into an import staging area            |
+| `koinome doctor CORPUS`  | Validate a corpus and refresh navigation maps                      |
+| `koinome check CORPUS`   | Read-only conformance check, CI-safe                               |
+| `koinome upgrade CORPUS` | Upgrade Koinome-managed tooling without touching your notes        |
 
 ## Guarantees
 
-1. **Every note opens as plain text** with no Koinome tooling installed.
-2. **Validation is deterministic.** No model, no network, no server.
-3. **AI assists around the gate, never inside it.** With every agent offline you can still read, write, validate, and commit.
-4. **No Koinome process rewrites your notes unattended.** The optional scheduled job is git sync only.
-5. **Derived pages cite their sources.** The validator rejects synthesis without provenance.
-6. **Sensitive boundaries are physical.** Keep sensitive material in a separate private corpus on a path no agent reaches.
-7. **No accounts, no telemetry.** Individual use is account-free, forever, and nothing phones home — not opt-out, not anonymised.
-8. **Complete, free and open-source.** The individual corpus tooling is a complete local-first product, not a trial, a limited edition, or a funnel toward a hosted service.
+1. **Plain text forever.** CommonMark, YAML frontmatter, git, todo.txt. Every note opens with no Koinome tooling installed.
+2. **Deterministic validation.** No model, no network, no server inside the gate. AI assists around it, never inside it.
+3. **Nothing rewrites your notes unattended.** The only optional scheduled job is git sync.
+4. **Provenance is enforced.** Derived pages cite their sources or the validator rejects them.
+5. **Sensitive boundaries are physical.** Keep sensitive material in a separate private corpus on a path no agent reaches.
+6. **No accounts, no telemetry.** Individual use is account-free forever, and nothing phones home. Not opt-out. None.
+7. **Complete and free.** The individual corpus tooling is a finished local-first product under Apache-2.0. Not a trial, not a limited edition, not a funnel.
 
-## Where this is going
+## Status
 
-Sharing is the point. Koinome's thesis is that knowledge should move between people, teams, and organisations through explicit, governed operations — contributed, combined, merged, split, transferred, federated — with provenance and policy, not silent copies. Today's AI memory products can't represent that movement because they are single-principal by architecture: one owner, one boundary, one authority.
+Pre-1.0, design-driven, part-time maintained, built in the open. I have kept a knowledge system of my own in daily use since 2014; Koinome is its public, governed rewrite, and I run my own three corpora on it. v0.1 ships only after I have used it daily for thirty consecutive days in real work. Next: an MCP server exposing scoped context and a formal propose-and-approve flow, then the first governed cross-corpus operation, share, between two corpora on one machine.
 
-Today's release is deliberately the foundation for that thesis: a complete local-first product for **individual** corpora, one corpus at a time. Cross-corpus operations are design scope and proceed through public RFCs — they are **not** shipped software, and this project never blurs the two.
-
-The full plan — the single-principal claim in full, the operation lifecycle, the roadmap, and the commitments that bind the project — is in **[docs/STRATEGY.md](docs/STRATEGY.md)**.
+Issues and RFC feedback are welcome; response times will be honest rather than fast.
 
 ## Licence
 
-Apache License 2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE). Contributions are accepted under the [Developer Certificate of Origin](https://developercertificate.org/); there is no CLA. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE). Contributions are accepted under the [Developer Certificate of Origin](https://developercertificate.org/); there is no CLA. See [CONTRIBUTING.md](CONTRIBUTING.md).
